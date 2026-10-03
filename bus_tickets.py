@@ -219,4 +219,20 @@ bus_tickets = [
             {"city_name": "Tucumán", "start_date": "2026-03-23T16:00:00", "end_date": "2026-03-23T20:00:00", "order": 2},
         ],
     },
+    {
+        "postal_code": "3260",
+        "bus_terminal_name": "Terminal Concepción del Uruguay",
+        "ticket": "SUV-226780488-0",
+        "dni": "40111222",
+        "name": "Gonzalo Errandonea",
+        "bus_license_plate": "AF 226 GU",
+        "enterprise": "Nuevo Expreso",
+        "start_date": datetime(2026, 9, 27, 20, 0),
+        "end_date": datetime(2026, 9, 28, 1, 30),
+        "trip_city": [
+            {"city_name": "Concepción del Uruguay", "start_date": "2026-09-27T20:00:00", "end_date": "2026-09-27T21:00:00", "order": 1},
+            {"city_name": "Gualeguaychú", "start_date": "2026-09-27T21:00:00", "end_date": "2026-09-27T21:15:00", "order": 2},
+            {"city_name": "Buenos Aires", "start_date": "2026-09-27T21:15:00", "end_date": "2026-09-28T01:30:00", "order": 3},
+        ],
+    },
 ]
