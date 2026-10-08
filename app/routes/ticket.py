@@ -2,11 +2,10 @@ from datetime import datetime, time, timedelta
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.models.ticket import BusTicket
+from app.models.ticket import BusTicket, Terminal
 from app.schemas.ticket import (
     BusTicketCreate,
     BusTicketResponse,
@@ -36,6 +35,8 @@ def create_bus_ticket(data: BusTicketCreate, db: Session = Depends(get_db)):
             status_code=409,
             detail="A bus ticket with that ticket code already exists",
         )
+    if not db.get(Terminal, data.terminal_uuid):
+        raise HTTPException(status_code=404, detail="Terminal not found")
 
     bus_ticket = BusTicket(**data.model_dump())
     db.add(bus_ticket)
@@ -46,18 +47,8 @@ def create_bus_ticket(data: BusTicketCreate, db: Session = Depends(get_db)):
 
 @terminal_router.get("/", response_model=list[TerminalItem])
 def list_terminals(db: Session = Depends(get_db)):
-    rows = (
-        db.query(
-            func.min(BusTicket.uuid).label("terminal_uuid"),
-            BusTicket.bus_terminal_name,
-        )
-        .group_by(BusTicket.bus_terminal_name)
-        .order_by(BusTicket.bus_terminal_name)
-        .all()
-    )
-    return [
-        TerminalItem(uuid=r.terminal_uuid, terminal=r.bus_terminal_name) for r in rows
-    ]
+    terminals = db.query(Terminal).order_by(Terminal.name).all()
+    return [TerminalItem(uuid=t.uuid, terminal=t.name) for t in terminals]
 
 
 @terminal_router.get(
@@ -65,10 +56,10 @@ def list_terminals(db: Session = Depends(get_db)):
     response_model=ExistTerminalResponse,
 )
 def exist_terminal(
-    uuid: UUID = Query(..., description="Bus ticket or terminal row UUID"),
+    uuid: UUID = Query(..., description="Terminal UUID"),
     db: Session = Depends(get_db),
 ):
-    found = db.query(BusTicket).filter(BusTicket.uuid == str(uuid)).first()
+    found = db.get(Terminal, str(uuid))
     return {"exist": found is not None}
 
 
@@ -87,7 +78,7 @@ def _calendar_day_bounds(dt: datetime) -> tuple[datetime, datetime]:
     response_model=ExistTerminalResponse,
 )
 def exist_trip(
-    uuid: UUID = Query(..., description="Bus ticket UUID"),
+    uuid: UUID = Query(..., description="Terminal UUID"),
     license_plate: str = Query(..., description="Bus license plate"),
     start_date: datetime = Query(
         ...,
@@ -96,7 +87,7 @@ def exist_trip(
     db: Session = Depends(get_db),
 ):
     """
-    Whether a bus ticket exists with that UUID and license plate whose trip
+    Whether the terminal has a bus ticket with that license plate whose trip
     overlaps the full calendar day of `start_date` (00:00–24:00 that date).
     """
     day_start, day_end = _calendar_day_bounds(start_date)
@@ -104,7 +95,7 @@ def exist_trip(
     found = (
         db.query(BusTicket)
         .filter(
-            BusTicket.uuid == str(uuid),
+            BusTicket.terminal_uuid == str(uuid),
             BusTicket.bus_license_plate == license_plate,
             BusTicket.start_date < day_end,
             BusTicket.end_date > day_start,
@@ -120,10 +111,7 @@ def exist_trip(
     response_model=TerminalBusTicketsResponse,
 )
 def get_bus_tickets_by_terminal(
-    uuid: UUID = Query(
-        ...,
-        description="UUID of a bus ticket row belonging to the terminal",
-    ),
+    uuid: UUID = Query(..., description="Terminal UUID"),
     start_date: datetime = Query(..., description="Range start (inclusive)"),
     end_date: datetime = Query(..., description="Range end (inclusive)"),
     db: Session = Depends(get_db),
@@ -134,15 +122,14 @@ def get_bus_tickets_by_terminal(
             detail="start_date cannot be after end_date",
         )
 
-    anchor = db.query(BusTicket).filter(BusTicket.uuid == str(uuid)).first()
-    if not anchor:
+    terminal = db.get(Terminal, str(uuid))
+    if not terminal:
         raise HTTPException(status_code=404, detail="Terminal not found")
 
-    terminal_name = anchor.bus_terminal_name
     tickets = (
         db.query(BusTicket)
         .filter(
-            BusTicket.bus_terminal_name == terminal_name,
+            BusTicket.terminal_uuid == terminal.uuid,
             BusTicket.start_date <= end_date,
             BusTicket.end_date >= start_date,
         )
@@ -160,4 +147,4 @@ def get_bus_tickets_by_terminal(
         for p in tickets
     ]
 
-    return TerminalBusTicketsResponse(name=terminal_name, payload=payload)
+    return TerminalBusTicketsResponse(name=terminal.name, payload=payload)

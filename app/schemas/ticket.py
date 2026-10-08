@@ -12,7 +12,7 @@ class TripCity(BaseModel):
 
 class BusTicketBase(BaseModel):
     postal_code: str
-    bus_terminal_name: str
+    terminal_uuid: str
     ticket: str
     dni: str
     name: str
