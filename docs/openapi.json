@@ -1,0 +1,836 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API Terminales de Buses",
+    "summary": "Gestión de terminales y pasajes de ómnibus",
+    "description": "\nServicio upstream de terminales de ómnibus. Expone las terminales y los\npasajes vendidos en ellas, y es consumido por el backend principal\n(`EXTERNAL_TERMINAL_UPSTREAM_URL`) y, a través de él, por el microservicio de OCR.\n\n**Autenticación:** ninguna. Es un servicio interno accesible solo desde la red del sistema.\n\n**Fechas:** ISO 8601 (`2026-03-30T06:00:00`). Las fechas sin zona horaria se\ninterpretan tal como están guardadas en la base.\n\n**Errores:** las respuestas de error tienen la forma `{\"detail\": \"...\"}`. Los\nerrores de validación (422) siguen el formato estándar de FastAPI.\n",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/bus_tickets/{ticket}": {
+      "get": {
+        "tags": [
+          "Bus Tickets"
+        ],
+        "summary": "Obtener pasaje por código de boleto",
+        "description": "Devuelve los datos completos de un pasaje (pasajero, colectivo, fechas y\nparadas). Lo consume el backend principal cuando un usuario se registra\nen un viaje.",
+        "operationId": "get_bus_ticket_by_ticket_bus_tickets__ticket__get",
+        "parameters": [
+          {
+            "name": "ticket",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Ticket"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusTicketResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No existe un pasaje con ese código",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/bus_tickets/": {
+      "post": {
+        "tags": [
+          "Bus Tickets"
+        ],
+        "summary": "Crear pasaje",
+        "description": "Registra un pasaje nuevo. El código `ticket` debe ser único y\n`terminal_uuid` debe referenciar una terminal existente.",
+        "operationId": "create_bus_ticket_bus_tickets__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BusTicketCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BusTicketResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La terminal indicada no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Ya existe un pasaje con ese código de boleto",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terminal/": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Listar terminales",
+        "description": "Todas las terminales registradas, ordenadas por nombre.",
+        "operationId": "list_terminals_terminal__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TerminalItem"
+                  },
+                  "type": "array",
+                  "title": "Response List Terminals Terminal  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terminal/exist/": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Verificar si existe una terminal",
+        "description": "Indica si existe una terminal con ese UUID. El backend principal lo usa\nantes de crear una terminal interna asociada.",
+        "operationId": "exist_terminal_terminal_exist__get",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID de la terminal",
+              "title": "Uuid"
+            },
+            "description": "UUID de la terminal"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExistTerminalResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terminal/trip/exist/": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Verificar si existe un viaje en una fecha",
+        "description": "Indica si la terminal tiene un pasaje con esa patente cuyo viaje se\nsuperpone con el día calendario de `start_date` (00:00–24:00 de esa\nfecha). Lo usa el backend principal antes de enviar notificaciones de\ndemora.",
+        "operationId": "exist_trip_terminal_trip_exist__get",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID de la terminal",
+              "title": "Uuid"
+            },
+            "description": "UUID de la terminal"
+          },
+          {
+            "name": "license_plate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Patente del colectivo",
+              "title": "License Plate"
+            },
+            "description": "Patente del colectivo"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Cualquier instante del día calendario a verificar (p. ej. 2026-03-30)",
+              "title": "Start Date"
+            },
+            "description": "Cualquier instante del día calendario a verificar (p. ej. 2026-03-30)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExistTerminalResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terminal/trip/": {
+      "get": {
+        "tags": [
+          "Terminal"
+        ],
+        "summary": "Listar viajes de una terminal en un rango",
+        "description": "Devuelve los viajes de la terminal que se superponen con el rango\n`[start_date, end_date]`, ordenados por salida. Lo usa el microservicio\nde OCR (vía backend principal) para saber qué colectivos se esperan.",
+        "operationId": "get_bus_tickets_by_terminal_terminal_trip__get",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "UUID de la terminal",
+              "title": "Uuid"
+            },
+            "description": "UUID de la terminal"
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Inicio del rango (inclusive)",
+              "title": "Start Date"
+            },
+            "description": "Inicio del rango (inclusive)"
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date-time",
+              "description": "Fin del rango (inclusive)",
+              "title": "End Date"
+            },
+            "description": "Fin del rango (inclusive)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TerminalBusTicketsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "`start_date` es posterior a `end_date`",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "La terminal no existe",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health check",
+        "description": "Devuelve `OK` en texto plano si el servicio está en funcionamiento.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "OK"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BusTicketCreate": {
+        "properties": {
+          "postal_code": {
+            "type": "string",
+            "title": "Postal Code",
+            "description": "Código postal de la terminal de origen",
+            "examples": [
+              "2000"
+            ]
+          },
+          "terminal_uuid": {
+            "type": "string",
+            "title": "Terminal Uuid",
+            "description": "UUID de la terminal a la que pertenece el pasaje",
+            "examples": [
+              "c2bcc293-5b53-4bb2-963c-8f5fe0b91373"
+            ]
+          },
+          "ticket": {
+            "type": "string",
+            "title": "Ticket",
+            "description": "Código de boleto (único)",
+            "examples": [
+              "TKT-000123"
+            ]
+          },
+          "dni": {
+            "type": "string",
+            "title": "Dni",
+            "description": "DNI del pasajero",
+            "examples": [
+              "40123456"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Nombre completo del pasajero",
+            "examples": [
+              "Juan Pérez"
+            ]
+          },
+          "bus_license_plate": {
+            "type": "string",
+            "title": "Bus License Plate",
+            "description": "Patente del colectivo",
+            "examples": [
+              "AB123CD"
+            ]
+          },
+          "enterprise": {
+            "type": "string",
+            "title": "Enterprise",
+            "description": "Empresa de transporte",
+            "examples": [
+              "Flecha Bus"
+            ]
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Date",
+            "description": "Fecha y hora de salida del viaje",
+            "examples": [
+              "2026-03-30T06:00:00"
+            ]
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Date",
+            "description": "Fecha y hora de llegada del viaje",
+            "examples": [
+              "2026-03-30T14:00:00"
+            ]
+          },
+          "trip_city": {
+            "items": {
+              "$ref": "#/components/schemas/TripCity"
+            },
+            "type": "array",
+            "title": "Trip City",
+            "description": "Paradas intermedias del recorrido, ordenadas por `order`"
+          }
+        },
+        "type": "object",
+        "required": [
+          "postal_code",
+          "terminal_uuid",
+          "ticket",
+          "dni",
+          "name",
+          "bus_license_plate",
+          "enterprise",
+          "start_date",
+          "end_date",
+          "trip_city"
+        ],
+        "title": "BusTicketCreate"
+      },
+      "BusTicketResponse": {
+        "properties": {
+          "postal_code": {
+            "type": "string",
+            "title": "Postal Code",
+            "description": "Código postal de la terminal de origen",
+            "examples": [
+              "2000"
+            ]
+          },
+          "terminal_uuid": {
+            "type": "string",
+            "title": "Terminal Uuid",
+            "description": "UUID de la terminal a la que pertenece el pasaje",
+            "examples": [
+              "c2bcc293-5b53-4bb2-963c-8f5fe0b91373"
+            ]
+          },
+          "ticket": {
+            "type": "string",
+            "title": "Ticket",
+            "description": "Código de boleto (único)",
+            "examples": [
+              "TKT-000123"
+            ]
+          },
+          "dni": {
+            "type": "string",
+            "title": "Dni",
+            "description": "DNI del pasajero",
+            "examples": [
+              "40123456"
+            ]
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Nombre completo del pasajero",
+            "examples": [
+              "Juan Pérez"
+            ]
+          },
+          "bus_license_plate": {
+            "type": "string",
+            "title": "Bus License Plate",
+            "description": "Patente del colectivo",
+            "examples": [
+              "AB123CD"
+            ]
+          },
+          "enterprise": {
+            "type": "string",
+            "title": "Enterprise",
+            "description": "Empresa de transporte",
+            "examples": [
+              "Flecha Bus"
+            ]
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Date",
+            "description": "Fecha y hora de salida del viaje",
+            "examples": [
+              "2026-03-30T06:00:00"
+            ]
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Date",
+            "description": "Fecha y hora de llegada del viaje",
+            "examples": [
+              "2026-03-30T14:00:00"
+            ]
+          },
+          "trip_city": {
+            "items": {
+              "$ref": "#/components/schemas/TripCity"
+            },
+            "type": "array",
+            "title": "Trip City",
+            "description": "Paradas intermedias del recorrido, ordenadas por `order`"
+          },
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "Identificador generado del pasaje",
+            "examples": [
+              "3f1c9a52-8d0e-4b7a-9e61-2a4c5d6e7f80"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "postal_code",
+          "terminal_uuid",
+          "ticket",
+          "dni",
+          "name",
+          "bus_license_plate",
+          "enterprise",
+          "start_date",
+          "end_date",
+          "trip_city",
+          "uuid"
+        ],
+        "title": "BusTicketResponse"
+      },
+      "ErrorResponse": {
+        "properties": {
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "Mensaje de error",
+            "examples": [
+              "Terminal not found"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "detail"
+        ],
+        "title": "ErrorResponse"
+      },
+      "ExistTerminalResponse": {
+        "properties": {
+          "exist": {
+            "type": "boolean",
+            "title": "Exist",
+            "description": "`true` si el recurso consultado existe",
+            "examples": [
+              true
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "exist"
+        ],
+        "title": "ExistTerminalResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "TerminalBusTicketItem": {
+        "properties": {
+          "license_plate": {
+            "type": "string",
+            "title": "License Plate",
+            "description": "Patente del colectivo",
+            "examples": [
+              "AB123CD"
+            ]
+          },
+          "enterprise": {
+            "type": "string",
+            "title": "Enterprise",
+            "description": "Empresa de transporte",
+            "examples": [
+              "Flecha Bus"
+            ]
+          },
+          "start_date": {
+            "type": "string",
+            "title": "Start Date",
+            "description": "Salida del viaje (ISO 8601)",
+            "examples": [
+              "2026-03-30T06:00:00"
+            ]
+          },
+          "end_date": {
+            "type": "string",
+            "title": "End Date",
+            "description": "Llegada del viaje (ISO 8601)",
+            "examples": [
+              "2026-03-30T14:00:00"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "license_plate",
+          "enterprise",
+          "start_date",
+          "end_date"
+        ],
+        "title": "TerminalBusTicketItem"
+      },
+      "TerminalBusTicketsResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Nombre de la terminal",
+            "examples": [
+              "Terminal Córdoba"
+            ]
+          },
+          "payload": {
+            "items": {
+              "$ref": "#/components/schemas/TerminalBusTicketItem"
+            },
+            "type": "array",
+            "title": "Payload",
+            "description": "Viajes que se superponen con el rango pedido"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "payload"
+        ],
+        "title": "TerminalBusTicketsResponse"
+      },
+      "TerminalItem": {
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "title": "Uuid",
+            "description": "UUID de la terminal",
+            "examples": [
+              "c2bcc293-5b53-4bb2-963c-8f5fe0b91373"
+            ]
+          },
+          "terminal": {
+            "type": "string",
+            "title": "Terminal",
+            "description": "Nombre de la terminal",
+            "examples": [
+              "Terminal Córdoba"
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "uuid",
+          "terminal"
+        ],
+        "title": "TerminalItem"
+      },
+      "TripCity": {
+        "properties": {
+          "city_name": {
+            "type": "string",
+            "title": "City Name",
+            "description": "Nombre de la ciudad del recorrido",
+            "examples": [
+              "Rosario"
+            ]
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Start Date",
+            "description": "Llegada a la ciudad",
+            "examples": [
+              "2026-03-30T08:00:00"
+            ]
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time",
+            "title": "End Date",
+            "description": "Salida de la ciudad",
+            "examples": [
+              "2026-03-30T08:20:00"
+            ]
+          },
+          "order": {
+            "type": "integer",
+            "title": "Order",
+            "description": "Posición de la parada en el recorrido (1 = primera)",
+            "examples": [
+              1
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "city_name",
+          "start_date",
+          "end_date",
+          "order"
+        ],
+        "title": "TripCity"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Bus Tickets",
+      "description": "Consulta y alta de pasajes por código de boleto."
+    },
+    {
+      "name": "Terminal",
+      "description": "Terminales y viajes asociados a cada una."
+    },
+    {
+      "name": "Health",
+      "description": "Estado del servicio."
+    }
+  ]
+}

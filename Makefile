@@ -28,3 +28,6 @@ seed-export:
 
 seed-load:
 	$(VENV_PYTHON) seed_data.py load
+
+openapi:
+	$(VENV_PYTHON) export_openapi.py

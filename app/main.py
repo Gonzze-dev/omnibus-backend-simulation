@@ -5,11 +5,32 @@ from uvicorn import run
 from app.config import settings
 from app.routes.ticket import bus_ticket_router, terminal_router
 
+DESCRIPTION = """
+Servicio upstream de terminales de ómnibus. Expone las terminales y los
+pasajes vendidos en ellas, y es consumido por el backend principal
+(`EXTERNAL_TERMINAL_UPSTREAM_URL`) y, a través de él, por el microservicio de OCR.
+
+**Autenticación:** ninguna. Es un servicio interno accesible solo desde la red del sistema.
+
+**Fechas:** ISO 8601 (`2026-03-30T06:00:00`). Las fechas sin zona horaria se
+interpretan tal como están guardadas en la base.
+
+**Errores:** las respuestas de error tienen la forma `{"detail": "..."}`. Los
+errores de validación (422) siguen el formato estándar de FastAPI.
+"""
+
+TAGS_METADATA = [
+    {"name": "Bus Tickets", "description": "Consulta y alta de pasajes por código de boleto."},
+    {"name": "Terminal", "description": "Terminales y viajes asociados a cada una."},
+    {"name": "Health", "description": "Estado del servicio."},
+]
+
 app = FastAPI(
     title="API Terminales de Buses",
-    description="Backend for bus terminal ticket management",
+    summary="Gestión de terminales y pasajes de ómnibus",
+    description=DESCRIPTION,
     version="1.0.0",
-    port=4990,
+    openapi_tags=TAGS_METADATA,
 )
 
 app.add_middleware(
@@ -29,8 +50,15 @@ def root():
     return RedirectResponse(url="/health")
 
 
-@app.get("/health", tags=["Health"], response_class=PlainTextResponse)
+@app.get(
+    "/health",
+    tags=["Health"],
+    response_class=PlainTextResponse,
+    summary="Health check",
+    responses={200: {"content": {"text/plain": {"example": "OK"}}}},
+)
 def health_check():
+    """Devuelve `OK` en texto plano si el servicio está en funcionamiento."""
     return "OK"
 
 if __name__ == "__main__":
