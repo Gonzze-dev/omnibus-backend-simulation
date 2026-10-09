@@ -1,5 +1,7 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from uvicorn import run
+from app.config import settings
 from app.database import Base, engine
 from app.routes.ticket import bus_ticket_router, terminal_router
 
@@ -10,6 +12,14 @@ app = FastAPI(
     description="Backend for bus terminal ticket management",
     version="1.0.0",
     port=4990,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(bus_ticket_router)
