@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import PlainTextResponse, RedirectResponse
 from uvicorn import run
 from app.config import settings
 from app.database import Base, engine
@@ -26,9 +27,14 @@ app.include_router(bus_ticket_router)
 app.include_router(terminal_router)
 
 
-@app.get("/", tags=["Health"])
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/health")
+
+
+@app.get("/health", tags=["Health"], response_class=PlainTextResponse)
 def health_check():
-    return {"status": "ok"}
+    return "OK"
 
 if __name__ == "__main__":
     PORT = 4990

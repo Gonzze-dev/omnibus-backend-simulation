@@ -124,9 +124,11 @@ No se aplica autenticación en ninguna de las rutas, ya que este servicio opera 
 
 ### Health check
 
-**GET /**
+**GET /health**
 
-Endpoint de verificación de estado del servidor. Permite comprobar que el servicio está en funcionamiento. Devuelve `{"status": "ok"}`.
+Endpoint de verificación de estado del servidor. Permite comprobar que el servicio está en funcionamiento. Devuelve `OK` (texto plano) con status 200.
+
+**GET /** redirige a `/health`.
 
 ### Bus Tickets (`/bus_tickets`)
 

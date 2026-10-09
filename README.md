@@ -33,7 +33,8 @@ El servidor se levanta en `http://127.0.0.1:8000`.
 
 | Método | Ruta                | Descripción                     |
 |--------|---------------------|---------------------------------|
-| GET    | `/`                 | Health check                    |
+| GET    | `/health`           | Health check (`OK`)             |
+| GET    | `/`                 | Redirige a `/health`            |
 | GET    | `/pasajes/{ticket}` | Obtener pasaje por ticket       |
 | POST   | `/pasajes/`         | Crear un nuevo pasaje           |
 
