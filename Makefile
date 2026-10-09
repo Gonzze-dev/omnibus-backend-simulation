@@ -22,3 +22,9 @@ update-dates:
 
 seed-terminals:
 	$(VENV_PYTHON) seed_terminals.py
+
+seed-export:
+	$(VENV_PYTHON) seed_data.py export --db terminales
+
+seed-load:
+	$(VENV_PYTHON) seed_data.py load

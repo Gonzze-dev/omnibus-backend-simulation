@@ -1,0 +1,736 @@
+{
+  "terminals": [
+    {
+      "uuid": "b2052ce8-cf6b-470e-ae7e-9fbb67f78394",
+      "name": "Terminal Azul"
+    },
+    {
+      "uuid": "52c41b41-9d99-4e10-bc0a-329d07bfccad",
+      "name": "Terminal Bahía Blanca"
+    },
+    {
+      "uuid": "875ede34-d66b-4dd8-a740-ccc5bdd8b1ce",
+      "name": "Terminal Bariloche"
+    },
+    {
+      "uuid": "1ed8264f-da3d-4eef-ac5e-ae1a87ed9230",
+      "name": "Terminal Catamarca"
+    },
+    {
+      "uuid": "ffe2c5e4-2b20-4e47-8ad1-c804b28bddd0",
+      "name": "Terminal Chajarí"
+    },
+    {
+      "uuid": "6de9f97a-6417-4629-ac2b-2199be5ffa89",
+      "name": "Terminal Chivilcoy"
+    },
+    {
+      "uuid": "9e78ebe0-9c39-462d-abbb-533d54fdd698",
+      "name": "Terminal Colón"
+    },
+    {
+      "uuid": "6232a509-6494-4f62-b054-6a3e0f48aa18",
+      "name": "Terminal Comodoro Rivadavia"
+    },
+    {
+      "uuid": "c4a835d6-e858-4c44-a4e4-5e6de3ce30ce",
+      "name": "Terminal Concepción del Uruguay"
+    },
+    {
+      "uuid": "5ef21a89-8920-4759-8a42-1c3eb29c350e",
+      "name": "Terminal Concordia"
+    },
+    {
+      "uuid": "c2bcc293-5b53-4bb2-963c-8f5fe0b91373",
+      "name": "Terminal Córdoba"
+    },
+    {
+      "uuid": "9318fc9d-f6b6-4b40-b965-cdcfde8720fd",
+      "name": "Terminal Corrientes"
+    },
+    {
+      "uuid": "00a30b8b-88ad-4077-a3ee-c7638a2432c8",
+      "name": "Terminal Dellepiane"
+    },
+    {
+      "uuid": "9eb967d5-3fdc-49c0-af46-8c69491597de",
+      "name": "Terminal Diamante"
+    },
+    {
+      "uuid": "b82ba8e9-03f7-4295-98dd-7cc5c5a775d8",
+      "name": "Terminal El Calafate"
+    },
+    {
+      "uuid": "d880cd60-2d73-4faa-9355-f9c86ceb2161",
+      "name": "Terminal Esquel"
+    },
+    {
+      "uuid": "b44013b9-97fb-4a6a-a4a5-fd3a1b23305e",
+      "name": "Terminal Federación"
+    },
+    {
+      "uuid": "ce9c3a01-f60e-4dc6-bdf6-b502ba8dbb32",
+      "name": "Terminal Formosa"
+    },
+    {
+      "uuid": "de483314-d82d-40f5-9bf9-339266758a41",
+      "name": "Terminal General Roca"
+    },
+    {
+      "uuid": "fbc31620-711e-4ac6-b4e3-f72cc6315cdb",
+      "name": "Terminal Gualeguay"
+    },
+    {
+      "uuid": "664d06e2-2c26-4c6d-8785-c9180e915f24",
+      "name": "Terminal Gualeguaychú"
+    },
+    {
+      "uuid": "bcc46854-bf2a-4800-9bec-2272e33cf334",
+      "name": "Terminal Junín"
+    },
+    {
+      "uuid": "48dc4f62-b2c3-41af-9369-74dad6befdf2",
+      "name": "Terminal La Paz"
+    },
+    {
+      "uuid": "98bdd302-81fc-4de3-9827-eef94df830a9",
+      "name": "Terminal La Plata"
+    },
+    {
+      "uuid": "1c59e1b1-09f5-44a7-987c-d82624f4bc02",
+      "name": "Terminal La Rioja"
+    },
+    {
+      "uuid": "f23ae9b4-e98f-49d6-807f-fba417f9a45a",
+      "name": "Terminal Mar del Plata"
+    },
+    {
+      "uuid": "66bf3a50-5d66-4464-b4b3-4ec1c9fa531d",
+      "name": "Terminal Mendoza"
+    },
+    {
+      "uuid": "1b9165a7-263f-44f3-963a-237a326865b7",
+      "name": "Terminal Necochea"
+    },
+    {
+      "uuid": "bf1d40b3-77fe-4919-8b4b-f302ae64fc9f",
+      "name": "Terminal Neuquén"
+    },
+    {
+      "uuid": "78175425-9adc-4761-aea2-36e4d1aa705d",
+      "name": "Terminal Nogoyá"
+    },
+    {
+      "uuid": "d74ed46f-7302-4f02-874d-8b7133003782",
+      "name": "Terminal Oberá"
+    },
+    {
+      "uuid": "c0908843-e42c-4730-9701-ba94a6cd9f51",
+      "name": "Terminal Olavarría"
+    },
+    {
+      "uuid": "6bbe3d32-cccd-48f6-9cd7-ecdca6ee208f",
+      "name": "Terminal Paraná"
+    },
+    {
+      "uuid": "47386bbb-30cd-4c6f-b638-dc9dc1f15fa0",
+      "name": "Terminal Paso de los Libres"
+    },
+    {
+      "uuid": "fbaaee49-864b-4c59-add7-aa87d47d4b7f",
+      "name": "Terminal Pergamino"
+    },
+    {
+      "uuid": "d3ef610b-6a59-4158-908f-03d6e37a5c83",
+      "name": "Terminal Pinamar"
+    },
+    {
+      "uuid": "6f1518b2-ca45-492b-a73c-dadfc7c8e475",
+      "name": "Terminal Posadas"
+    },
+    {
+      "uuid": "005d85ce-528c-49ae-8f6a-a613039360d9",
+      "name": "Terminal Puerto Iguazú"
+    },
+    {
+      "uuid": "3e0f33cd-4175-4b4c-984d-8ad3896ecdac",
+      "name": "Terminal Puerto Madryn"
+    },
+    {
+      "uuid": "6aa282a4-034f-4e68-871b-3a7c72cf109b",
+      "name": "Terminal Rafaela"
+    },
+    {
+      "uuid": "de991a28-c14c-47fe-86d2-e1d21f7040e5",
+      "name": "Terminal Reconquista"
+    },
+    {
+      "uuid": "30cf4389-682c-4729-8a3f-422aa407dc53",
+      "name": "Terminal Resistencia"
+    },
+    {
+      "uuid": "e8927088-1aac-43da-990c-6ebe32e9e7f6",
+      "name": "Terminal Retiro"
+    },
+    {
+      "uuid": "b6154138-e6af-44ce-af11-b9567efe47fd",
+      "name": "Terminal Río Cuarto"
+    },
+    {
+      "uuid": "9485bb34-2efc-42de-99be-0cc70f64fded",
+      "name": "Terminal Río Gallegos"
+    },
+    {
+      "uuid": "231e9374-ce9b-4f31-813d-13ea96578d84",
+      "name": "Terminal Río Grande"
+    },
+    {
+      "uuid": "fdadae26-8ed6-4a42-a7fb-2572ad7dcd01",
+      "name": "Terminal Rosario"
+    },
+    {
+      "uuid": "c830bd40-662f-42dc-b9c5-3cd381078ef0",
+      "name": "Terminal Salta"
+    },
+    {
+      "uuid": "2f4fb762-8897-46d7-818a-4596771d0453",
+      "name": "Terminal San Clemente del Tuyú"
+    },
+    {
+      "uuid": "4e7a8f13-88a1-49f3-8be3-0319d4d5320d",
+      "name": "Terminal San Francisco"
+    },
+    {
+      "uuid": "7b3af583-ed9a-49b6-895a-73ba81605b9b",
+      "name": "Terminal San Juan"
+    },
+    {
+      "uuid": "81ff6e98-bc08-4048-9440-c373ba821c3c",
+      "name": "Terminal San Luis"
+    },
+    {
+      "uuid": "9848a29f-bcd4-4543-bb96-7441d43216d3",
+      "name": "Terminal San Martín de los Andes"
+    },
+    {
+      "uuid": "928429fd-d53a-4295-ba7a-4ccdc82cd0de",
+      "name": "Terminal San Nicolás"
+    },
+    {
+      "uuid": "c72bbc55-e925-4f9e-87d7-8319dce5ae55",
+      "name": "Terminal San Rafael"
+    },
+    {
+      "uuid": "d133b168-6176-48cb-bc8a-293d91924bac",
+      "name": "Terminal San Salvador de Jujuy"
+    },
+    {
+      "uuid": "138f0729-8d7c-4539-bf24-afc9baca82d7",
+      "name": "Terminal Santa Fe"
+    },
+    {
+      "uuid": "72be393b-81c6-41ee-bfa8-5a26fd4761bf",
+      "name": "Terminal Santa Rosa"
+    },
+    {
+      "uuid": "d8f1a7d6-ed76-40db-a917-6f6714ae5123",
+      "name": "Terminal Santiago del Estero"
+    },
+    {
+      "uuid": "05cd23c1-e3de-4d14-b86f-0dca79550c13",
+      "name": "Terminal Tandil"
+    },
+    {
+      "uuid": "9f3b7e43-dbd8-4bb7-a22d-b6e32f0d385a",
+      "name": "Terminal Termas de Río Hondo"
+    },
+    {
+      "uuid": "b572a13f-81cf-4c62-b0ce-f3dcf29c2968",
+      "name": "Terminal Trelew"
+    },
+    {
+      "uuid": "345fe836-5fbe-40e8-8d3f-5432786534c2",
+      "name": "Terminal Tres Arroyos"
+    },
+    {
+      "uuid": "1284804d-e79d-49ed-9f32-5de0892f6bfc",
+      "name": "Terminal Tucumán"
+    },
+    {
+      "uuid": "6f1a8471-7cb1-405d-aa6d-a4b15160cc11",
+      "name": "Terminal Ushuaia"
+    },
+    {
+      "uuid": "ee2e99d6-e3eb-4d96-94cf-88f896e6355d",
+      "name": "Terminal Venado Tuerto"
+    },
+    {
+      "uuid": "211d36ea-af8f-46f7-86b3-d2773395d078",
+      "name": "Terminal Victoria"
+    },
+    {
+      "uuid": "dfa0a7c4-06a1-4d92-b75e-3175309cc178",
+      "name": "Terminal Viedma"
+    },
+    {
+      "uuid": "f1a883f2-55c6-4a10-abe0-97b0e530397d",
+      "name": "Terminal Villa Carlos Paz"
+    },
+    {
+      "uuid": "eb96d5af-3826-457d-b4bf-3fe7e34e4dcd",
+      "name": "Terminal Villa Gesell"
+    },
+    {
+      "uuid": "9161ca44-116b-4426-ab42-e09e37bee0e4",
+      "name": "Terminal Villa María"
+    },
+    {
+      "uuid": "a6ae3e3f-02a1-48cc-8602-445073fd1400",
+      "name": "Terminal Villa Mercedes"
+    },
+    {
+      "uuid": "ad0becf8-8353-42fb-b7cc-ae147bec1d49",
+      "name": "Terminal Villaguay"
+    }
+  ],
+  "pasajes": [
+    {
+      "uuid": "ebcd3427-5082-4813-833e-8a46a950e145",
+      "postal_code": "4000",
+      "terminal_uuid": "1284804d-e79d-49ed-9f32-5de0892f6bfc",
+      "ticket": "AND-003-2026",
+      "dni": "35987654",
+      "name": "Carlos López",
+      "bus_license_plate": "IJ 789 KL",
+      "enterprise": "Andesmar",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Tucumán",
+          "start_date": "2026-03-12T10:00:00",
+          "end_date": "2026-03-12T16:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Santiago del Estero",
+          "start_date": "2026-03-12T16:00:00",
+          "end_date": "2026-03-12T20:00:00",
+          "order": 2
+        },
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-12T20:00:00",
+          "end_date": "2026-03-13T02:00:00",
+          "order": 3
+        },
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-13T02:00:00",
+          "end_date": "2026-03-13T06:00:00",
+          "order": 4
+        }
+      ]
+    },
+    {
+      "uuid": "c11ea199-91e2-43d4-a72e-1ed619258ac5",
+      "postal_code": "5000",
+      "terminal_uuid": "c2bcc293-5b53-4bb2-963c-8f5fe0b91373",
+      "ticket": "CHE-001-2026",
+      "dni": "30123456",
+      "name": "Juan Pérez",
+      "bus_license_plate": "AB 123 CD",
+      "enterprise": "Chevallier",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-10T08:00:00",
+          "end_date": "2026-03-10T12:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Rosario",
+          "start_date": "2026-03-10T12:00:00",
+          "end_date": "2026-03-10T15:00:00",
+          "order": 2
+        },
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-10T15:00:00",
+          "end_date": "2026-03-10T18:00:00",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "uuid": "0af81f74-38a3-41f1-b98c-761de849cc91",
+      "postal_code": "1000",
+      "terminal_uuid": "e8927088-1aac-43da-990c-6ebe32e9e7f6",
+      "ticket": "FLE-002-2026",
+      "dni": "28654321",
+      "name": "María García",
+      "bus_license_plate": "EF 456 GH",
+      "enterprise": "Flecha Bus",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-11T22:00:00",
+          "end_date": "2026-03-12T04:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Mar del Plata",
+          "start_date": "2026-03-12T04:00:00",
+          "end_date": "2026-03-12T08:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "447ab6ac-488a-4ccc-90f1-6ddbf561f6e6",
+      "postal_code": "5500",
+      "terminal_uuid": "66bf3a50-5d66-4464-b4b3-4ec1c9fa531d",
+      "ticket": "FLE-005-2026",
+      "dni": "33444555",
+      "name": "Roberto Fernández",
+      "bus_license_plate": "QR 654 ST",
+      "enterprise": "Flecha Bus",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Mendoza",
+          "start_date": "2026-03-15T20:00:00",
+          "end_date": "2026-03-16T04:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "San Luis",
+          "start_date": "2026-03-16T04:00:00",
+          "end_date": "2026-03-16T08:00:00",
+          "order": 2
+        },
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-16T08:00:00",
+          "end_date": "2026-03-16T12:00:00",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "uuid": "a8bbfeac-0503-4914-9670-3a084771c45e",
+      "postal_code": "2000",
+      "terminal_uuid": "fdadae26-8ed6-4a42-a7fb-2572ad7dcd01",
+      "ticket": "JOVI-009-2026",
+      "dni": "31777888",
+      "name": "Luciana Gómez",
+      "bus_license_plate": "GH 444 IJ",
+      "enterprise": "Jovi Bus",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Rosario",
+          "start_date": "2026-03-18T07:30:00",
+          "end_date": "2026-03-18T12:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-18T12:00:00",
+          "end_date": "2026-03-18T16:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "a699ba16-3115-41ff-8f5f-0db7d89a9fc3",
+      "postal_code": "5000",
+      "terminal_uuid": "c2bcc293-5b53-4bb2-963c-8f5fe0b91373",
+      "ticket": "JOVI-010-2026",
+      "dni": "38999000",
+      "name": "Matías Ruiz",
+      "bus_license_plate": "KL 555 MN",
+      "enterprise": "Jovi Bus",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-20T14:00:00",
+          "end_date": "2026-03-20T18:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Villa María",
+          "start_date": "2026-03-20T18:00:00",
+          "end_date": "2026-03-20T19:30:00",
+          "order": 2
+        },
+        {
+          "city_name": "Rosario",
+          "start_date": "2026-03-20T19:30:00",
+          "end_date": "2026-03-20T22:00:00",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "uuid": "0c9a92d2-dfb2-4efd-9bac-7d5d18db51fc",
+      "postal_code": "1000",
+      "terminal_uuid": "e8927088-1aac-43da-990c-6ebe32e9e7f6",
+      "ticket": "JOVI-011-2026",
+      "dni": "34111999",
+      "name": "Sofía Herrera",
+      "bus_license_plate": "OP 666 QR",
+      "enterprise": "Jovi Bus",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-21T23:00:00",
+          "end_date": "2026-03-22T05:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-22T05:00:00",
+          "end_date": "2026-03-22T10:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "66b3d12b-6a5a-4842-8b1b-d58f9980f1cc",
+      "postal_code": "5000",
+      "terminal_uuid": "c2bcc293-5b53-4bb2-963c-8f5fe0b91373",
+      "ticket": "NUV-006-2026",
+      "dni": "29876543",
+      "name": "Laura Martínez",
+      "bus_license_plate": "UV 111 WX",
+      "enterprise": "Nuevo Expreso",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-16T06:00:00",
+          "end_date": "2026-03-16T10:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Rosario",
+          "start_date": "2026-03-16T10:00:00",
+          "end_date": "2026-03-16T14:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "c07f377d-7d25-4a65-99f2-f0b9d77cb623",
+      "postal_code": "1000",
+      "terminal_uuid": "e8927088-1aac-43da-990c-6ebe32e9e7f6",
+      "ticket": "NUV-007-2026",
+      "dni": "37222333",
+      "name": "Diego Sánchez",
+      "bus_license_plate": "YZ 222 AB",
+      "enterprise": "Nuevo Expreso",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-17T21:00:00",
+          "end_date": "2026-03-18T01:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Paraná",
+          "start_date": "2026-03-18T01:00:00",
+          "end_date": "2026-03-18T04:00:00",
+          "order": 2
+        },
+        {
+          "city_name": "Santa Fe",
+          "start_date": "2026-03-18T04:00:00",
+          "end_date": "2026-03-18T07:00:00",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "uuid": "a4d5b16a-46f1-4daf-babe-371de0145db5",
+      "postal_code": "3100",
+      "terminal_uuid": "6bbe3d32-cccd-48f6-9cd7-ecdca6ee208f",
+      "ticket": "NUV-008-2026",
+      "dni": "42555666",
+      "name": "Valentina Torres",
+      "bus_license_plate": "CD 333 EF",
+      "enterprise": "Nuevo Expreso",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Paraná",
+          "start_date": "2026-03-19T09:00:00",
+          "end_date": "2026-03-19T12:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Buenos Aires",
+          "start_date": "2026-03-19T12:00:00",
+          "end_date": "2026-03-19T15:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "664d06e2-2c26-4c6d-8785-c9180e915f24",
+      "postal_code": "3260",
+      "terminal_uuid": "664d06e2-2c26-4c6d-8785-c9180e915f24",
+      "ticket": "SUV-226780488-0",
+      "dni": "40111222",
+      "name": "Gonzalo Errandonea",
+      "bus_license_plate": "AF 226 GU",
+      "enterprise": "Nuevo Expreso",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "order": 1,
+          "end_date": "2026-09-30T21:00:00",
+          "city_name": "Concepción del Uruguay",
+          "start_date": "2026-09-30T20:00:00"
+        },
+        {
+          "order": 2,
+          "end_date": "2026-09-30T21:15:00",
+          "city_name": "Gualeguaychú",
+          "start_date": "2026-09-30T21:00:00"
+        },
+        {
+          "order": 3,
+          "end_date": "2026-10-01T01:30:00",
+          "city_name": "Buenos Aires",
+          "start_date": "2026-09-30T21:15:00"
+        }
+      ]
+    },
+    {
+      "uuid": "8a4614a3-03d4-4def-9f31-9bf2bafe2026",
+      "postal_code": "4000",
+      "terminal_uuid": "1284804d-e79d-49ed-9f32-5de0892f6bfc",
+      "ticket": "TAT-012-2026",
+      "dni": "27333444",
+      "name": "Fernando Álvarez",
+      "bus_license_plate": "ST 777 UV",
+      "enterprise": "Rápido Tata",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Tucumán",
+          "start_date": "2026-03-19T18:00:00",
+          "end_date": "2026-03-19T23:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Santiago del Estero",
+          "start_date": "2026-03-19T23:00:00",
+          "end_date": "2026-03-20T02:00:00",
+          "order": 2
+        },
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-20T02:00:00",
+          "end_date": "2026-03-20T08:00:00",
+          "order": 3
+        }
+      ]
+    },
+    {
+      "uuid": "58bb6e4e-759c-47bd-ac37-d309d5790929",
+      "postal_code": "5000",
+      "terminal_uuid": "c2bcc293-5b53-4bb2-963c-8f5fe0b91373",
+      "ticket": "TAT-013-2026",
+      "dni": "41888777",
+      "name": "Camila Díaz",
+      "bus_license_plate": "WX 888 YZ",
+      "enterprise": "Rápido Tata",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Córdoba",
+          "start_date": "2026-03-22T05:30:00",
+          "end_date": "2026-03-22T10:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Tucumán",
+          "start_date": "2026-03-22T10:00:00",
+          "end_date": "2026-03-22T16:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "876082a9-8bfd-4a41-b66b-b813db24f9e2",
+      "postal_code": "4200",
+      "terminal_uuid": "d8f1a7d6-ed76-40db-a917-6f6714ae5123",
+      "ticket": "TAT-014-2026",
+      "dni": "36555444",
+      "name": "Pablo Morales",
+      "bus_license_plate": "AB 999 CD",
+      "enterprise": "Rápido Tata",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Santiago del Estero",
+          "start_date": "2026-03-23T12:00:00",
+          "end_date": "2026-03-23T16:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Tucumán",
+          "start_date": "2026-03-23T16:00:00",
+          "end_date": "2026-03-23T20:00:00",
+          "order": 2
+        }
+      ]
+    },
+    {
+      "uuid": "93025d87-eb4f-4905-b7df-42397fb11d97",
+      "postal_code": "8300",
+      "terminal_uuid": "bf1d40b3-77fe-4919-8b4b-f302ae64fc9f",
+      "ticket": "VIA-004-2026",
+      "dni": "40111222",
+      "name": "Ana Rodríguez",
+      "bus_license_plate": "MN 321 OP",
+      "enterprise": "Via Bariloche",
+      "start_date": "2026-10-08T00:00:00",
+      "end_date": "2026-10-08T23:59:59",
+      "trip_city": [
+        {
+          "city_name": "Neuquén",
+          "start_date": "2026-03-14T07:30:00",
+          "end_date": "2026-03-14T10:00:00",
+          "order": 1
+        },
+        {
+          "city_name": "Bariloche",
+          "start_date": "2026-03-14T10:00:00",
+          "end_date": "2026-03-14T14:00:00",
+          "order": 2
+        }
+      ]
+    }
+  ]
+}
