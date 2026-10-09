@@ -1,9 +1,7 @@
 """Seed script to insert sample data into the database."""
-from app.database import SessionLocal, engine, Base
+from app.database import SessionLocal
 from app.models.ticket import BusTicket, Terminal
 from bus_tickets import bus_tickets
-
-Base.metadata.create_all(bind=engine)
 
 
 def seed():

@@ -1,9 +1,7 @@
 """Seed script to insert the bus terminals of Argentina into the database."""
-from app.database import SessionLocal, engine, Base
+from app.database import SessionLocal
 from app.models.ticket import Terminal
 from terminals import terminals
-
-Base.metadata.create_all(bind=engine)
 
 
 def seed_terminals():

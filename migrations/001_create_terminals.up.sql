@@ -1,6 +1,5 @@
 -- Moves terminal names out of pasajes into their own table and links
 -- each bus ticket to its terminal through a foreign key.
-BEGIN;
 
 CREATE TABLE terminals (
     uuid VARCHAR(36) PRIMARY KEY,
@@ -27,4 +26,3 @@ CREATE INDEX ix_pasajes_terminal_uuid ON pasajes (terminal_uuid);
 
 ALTER TABLE pasajes DROP COLUMN bus_terminal_name;
 
-COMMIT;

@@ -3,10 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import PlainTextResponse, RedirectResponse
 from uvicorn import run
 from app.config import settings
-from app.database import Base, engine
 from app.routes.ticket import bus_ticket_router, terminal_router
-
-Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="API Terminales de Buses",
