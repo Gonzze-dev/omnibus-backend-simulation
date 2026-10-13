@@ -4,7 +4,7 @@ from datetime import datetime
 bus_tickets = [
     {
         "postal_code": "5000",
-        "bus_terminal_name": "Terminal Córdoba",
+        "bus_terminal_name": "TERMINAL CÓRDOBA",
         "ticket": "CHE-001-2026",
         "dni": "30123456",
         "name": "Juan Pérez",
@@ -20,7 +20,7 @@ bus_tickets = [
     },
     {
         "postal_code": "1000",
-        "bus_terminal_name": "Terminal Retiro",
+        "bus_terminal_name": "TERMINAL RETIRO",
         "ticket": "FLE-002-2026",
         "dni": "28654321",
         "name": "María García",
@@ -35,7 +35,7 @@ bus_tickets = [
     },
     {
         "postal_code": "4000",
-        "bus_terminal_name": "Terminal Tucumán",
+        "bus_terminal_name": "TERMINAL TUCUMÁN",
         "ticket": "AND-003-2026",
         "dni": "35987654",
         "name": "Carlos López",
@@ -52,7 +52,7 @@ bus_tickets = [
     },
     {
         "postal_code": "8300",
-        "bus_terminal_name": "Terminal Neuquén",
+        "bus_terminal_name": "TERMINAL NEUQUÉN",
         "ticket": "VIA-004-2026",
         "dni": "40111222",
         "name": "Ana Rodríguez",
@@ -67,7 +67,7 @@ bus_tickets = [
     },
     {
         "postal_code": "5500",
-        "bus_terminal_name": "Terminal Mendoza",
+        "bus_terminal_name": "TERMINAL MENDOZA",
         "ticket": "FLE-005-2026",
         "dni": "33444555",
         "name": "Roberto Fernández",
@@ -83,7 +83,7 @@ bus_tickets = [
     },
     {
         "postal_code": "5000",
-        "bus_terminal_name": "Terminal Córdoba",
+        "bus_terminal_name": "TERMINAL CÓRDOBA",
         "ticket": "NUV-006-2026",
         "dni": "29876543",
         "name": "Laura Martínez",
@@ -98,7 +98,7 @@ bus_tickets = [
     },
     {
         "postal_code": "1000",
-        "bus_terminal_name": "Terminal Retiro",
+        "bus_terminal_name": "TERMINAL RETIRO",
         "ticket": "NUV-007-2026",
         "dni": "37222333",
         "name": "Diego Sánchez",
@@ -114,7 +114,7 @@ bus_tickets = [
     },
     {
         "postal_code": "3100",
-        "bus_terminal_name": "Terminal Paraná",
+        "bus_terminal_name": "TERMINAL PARANÁ",
         "ticket": "NUV-008-2026",
         "dni": "42555666",
         "name": "Valentina Torres",
@@ -129,7 +129,7 @@ bus_tickets = [
     },
     {
         "postal_code": "2000",
-        "bus_terminal_name": "Terminal Rosario",
+        "bus_terminal_name": "TERMINAL ROSARIO",
         "ticket": "JOVI-009-2026",
         "dni": "31777888",
         "name": "Luciana Gómez",
@@ -144,7 +144,7 @@ bus_tickets = [
     },
     {
         "postal_code": "5000",
-        "bus_terminal_name": "Terminal Córdoba",
+        "bus_terminal_name": "TERMINAL CÓRDOBA",
         "ticket": "JOVI-010-2026",
         "dni": "38999000",
         "name": "Matías Ruiz",
@@ -160,7 +160,7 @@ bus_tickets = [
     },
     {
         "postal_code": "1000",
-        "bus_terminal_name": "Terminal Retiro",
+        "bus_terminal_name": "TERMINAL RETIRO",
         "ticket": "JOVI-011-2026",
         "dni": "34111999",
         "name": "Sofía Herrera",
@@ -175,7 +175,7 @@ bus_tickets = [
     },
     {
         "postal_code": "4000",
-        "bus_terminal_name": "Terminal Tucumán",
+        "bus_terminal_name": "TERMINAL TUCUMÁN",
         "ticket": "TAT-012-2026",
         "dni": "27333444",
         "name": "Fernando Álvarez",
@@ -191,7 +191,7 @@ bus_tickets = [
     },
     {
         "postal_code": "5000",
-        "bus_terminal_name": "Terminal Córdoba",
+        "bus_terminal_name": "TERMINAL CÓRDOBA",
         "ticket": "TAT-013-2026",
         "dni": "41888777",
         "name": "Camila Díaz",
@@ -206,7 +206,7 @@ bus_tickets = [
     },
     {
         "postal_code": "4200",
-        "bus_terminal_name": "Terminal Santiago del Estero",
+        "bus_terminal_name": "TERMINAL SANTIAGO DEL ESTERO",
         "ticket": "TAT-014-2026",
         "dni": "36555444",
         "name": "Pablo Morales",
@@ -221,7 +221,7 @@ bus_tickets = [
     },
     {
         "postal_code": "3260",
-        "bus_terminal_name": "Terminal Concepción del Uruguay",
+        "bus_terminal_name": "TERMINAL CONCEPCIÓN DEL URUGUAY",
         "ticket": "SUV-226780488-0",
         "dni": "40111222",
         "name": "Gonzalo Errandonea",
