@@ -1,5 +1,5 @@
 """Apply the SQL migrations in migrations/ and record them in
-terminales_schema_migrations.
+terminals_schema_migrations.
 
 Usage:
     python migrate.py [--dir migrations] <up|status|baseline>
@@ -16,11 +16,13 @@ from pathlib import Path
 
 from app.database import engine
 
-MIGRATIONS_TABLE = "terminales_schema_migrations"
+MIGRATIONS_TABLE = "terminals_schema_migrations"
+# Former name of MIGRATIONS_TABLE; renamed on startup if it still exists.
+LEGACY_MIGRATIONS_TABLE = "terminales_schema_migrations"
 SCHEMA_FILE = "schema.sql"
 UP_SUFFIX = ".up.sql"
 # Its presence means the database already has the application schema.
-SENTINEL_TABLE = "pasajes"
+SENTINEL_TABLES = ["bus_tickets", "pasajes"]  # "pasajes" is the former name of bus_tickets
 
 
 def list_migrations(directory: Path) -> list[str]:
@@ -41,7 +43,7 @@ def record(cur, names: list[str]) -> None:
 
 
 def exec_file(cur, path: Path) -> None:
-    print(f"ejecutando {path.name}")
+    print(f"running {path.name}")
     # Without parameters psycopg2 sends the text as-is, so several statements work.
     cur.execute(path.read_text(encoding="utf-8"))
 
@@ -51,13 +53,13 @@ def up(conn, directory: Path) -> None:
     with conn.cursor() as cur:
         done = applied(cur)
         if not done:
-            cur.execute("SELECT to_regclass(%s) IS NOT NULL", (SENTINEL_TABLE,))
+            cur.execute("SELECT bool_or(to_regclass(t) IS NOT NULL) FROM unnest(%s) AS t", (SENTINEL_TABLES,))
             if cur.fetchone()[0]:
                 sys.exit(
-                    f"la base ya tiene tablas pero no hay migraciones registradas en "
-                    f"{MIGRATIONS_TABLE}; si está al día ejecutá `python migrate.py baseline`"
+                    f"the database already has tables but no migrations are recorded in "
+                    f"{MIGRATIONS_TABLE}; if it is up to date run `python migrate.py baseline`"
                 )
-            print(f"base vacía: aplicando {SCHEMA_FILE}")
+            print(f"empty database: applying {SCHEMA_FILE}")
             exec_file(cur, directory / SCHEMA_FILE)
             record(cur, names)
             conn.commit()
@@ -71,14 +73,14 @@ def up(conn, directory: Path) -> None:
             record(cur, [name])
         conn.commit()
     if not pending:
-        print("no hay migraciones pendientes")
+        print("no pending migrations")
 
 
 def status(conn, directory: Path) -> None:
     with conn.cursor() as cur:
         done = applied(cur)
     for name in list_migrations(directory):
-        print(f"{'aplicada' if name in done else 'pendiente':<10} {name}")
+        print(f"{'applied' if name in done else 'pending':<10} {name}")
 
 
 def baseline(conn, directory: Path) -> None:
@@ -86,14 +88,14 @@ def baseline(conn, directory: Path) -> None:
     with conn.cursor() as cur:
         record(cur, names)
     conn.commit()
-    print(f"{len(names)} migraciones marcadas como aplicadas")
+    print(f"{len(names)} migrations marked as applied")
 
 
 COMMANDS = {"up": up, "status": status, "baseline": baseline}
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Runner de migraciones SQL")
+    parser = argparse.ArgumentParser(description="SQL migration runner")
     parser.add_argument("command", nargs="?", default="up", choices=COMMANDS)
     parser.add_argument("--dir", default="migrations", type=Path)
     args = parser.parse_args()
@@ -101,6 +103,12 @@ def main() -> None:
     conn = engine.raw_connection()
     try:
         with conn.cursor() as cur:
+            cur.execute(
+                "SELECT to_regclass(%s) IS NOT NULL AND to_regclass(%s) IS NULL",
+                (LEGACY_MIGRATIONS_TABLE, MIGRATIONS_TABLE),
+            )
+            if cur.fetchone()[0]:
+                cur.execute(f"ALTER TABLE {LEGACY_MIGRATIONS_TABLE} RENAME TO {MIGRATIONS_TABLE}")
             cur.execute(
                 f"""CREATE TABLE IF NOT EXISTS {MIGRATIONS_TABLE} (
                     name       VARCHAR(255) PRIMARY KEY,

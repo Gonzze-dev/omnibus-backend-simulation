@@ -1,12 +1,12 @@
-# API Terminales de Buses
+# Bus Terminals API
 
-Backend para gestión de pasajes de terminales de buses, construido con **Python** y **FastAPI**.
+Backend for managing bus terminal tickets, built with **Python** and **FastAPI**.
 
-## Requisitos
+## Requirements
 
 - Python 3.10+
 
-## Instalación
+## Installation
 
 ```bash
 python -m venv venv
@@ -16,67 +16,67 @@ venv\Scripts\activate        # Windows
 pip install -r requirements.txt
 ```
 
-## Base de datos
+## Database
 
-El esquema se gestiona con `migrate.py`, que usa las mismas variables `DB_*` (`.env`) que la API y registra lo aplicado en la tabla `terminales_schema_migrations`. La API ya no crea tablas al arrancar: hay que migrar antes.
-
-```bash
-python migrate.py up        # o: make migrate-up
-python migrate.py status    # qué migraciones están aplicadas
-python migrate.py baseline  # marca todas como aplicadas sin ejecutarlas
-```
-
-- **Base vacía:** `up` ejecuta `migrations/schema.sql` (esquema completo actual) y marca todas las migraciones como aplicadas.
-- **Base existente:** `up` aplica solo las migraciones `NNN_nombre.up.sql` pendientes, en orden.
-- **Base creada antes de este script** (por `create_all`): ejecutar `baseline` una única vez.
-
-Datos iniciales: `make seed-terminals` (terminales de Argentina) y `python seed.py` (pasajes de ejemplo).
-
-En producción la imagen Docker incluye el script: `python migrate.py up` (por ejemplo como *Pre-Deploy Command* en Railway).
-
-Al agregar una migración nueva, crear `migrations/NNN_nombre.up.sql` y **reflejar el cambio también en `schema.sql`**.
-
-## Ejecutar
+The schema is managed with `migrate.py`, which uses the same `DB_*` variables (`.env`) as the API and records what has been applied in the `terminals_schema_migrations` table (databases that still have the old `terminales_schema_migrations` table get it renamed automatically). The API no longer creates tables on startup: you have to migrate first.
 
 ```bash
-make run    # o: uvicorn app.main:app --reload --port 4990
+python migrate.py up        # or: make migrate-up
+python migrate.py status    # which migrations are applied
+python migrate.py baseline  # marks all of them as applied without running them
 ```
 
-El servidor se levanta en `http://127.0.0.1:4990`.
+- **Empty database:** `up` runs `migrations/schema.sql` (full current schema) and marks every migration as applied.
+- **Existing database:** `up` applies only the pending `NNN_name.up.sql` migrations, in order.
+- **Database created before this script** (by `create_all`): run `baseline` exactly once.
 
-## Documentación de la API (OpenAPI)
+Initial data: `make seed-terminals` (terminals of Argentina) and `python seed.py` (sample bus tickets).
 
-FastAPI genera la especificación **OpenAPI 3.1** a partir de los esquemas Pydantic y los metadatos de cada ruta (resumen, descripción, ejemplos y respuestas de error).
+In production the Docker image includes the script: `python migrate.py up` (for example as the *Pre-Deploy Command* on Railway).
+
+When adding a new migration, create `migrations/NNN_name.up.sql` and **reflect the change in `schema.sql` too**.
+
+## Run
+
+```bash
+make run    # or: uvicorn app.main:app --reload --port 4990
+```
+
+The server starts at `http://127.0.0.1:4990`.
+
+## API documentation (OpenAPI)
+
+FastAPI generates the **OpenAPI 3.1** specification from the Pydantic schemas and each route's metadata (summary, description, examples and error responses).
 
 - Swagger UI: `http://127.0.0.1:4990/docs`
 - ReDoc: `http://127.0.0.1:4990/redoc`
-- Spec en JSON: `http://127.0.0.1:4990/openapi.json`
-- Copia versionada: [`docs/openapi.json`](docs/openapi.json)
+- JSON spec: `http://127.0.0.1:4990/openapi.json`
+- Versioned copy: [`docs/openapi.json`](docs/openapi.json)
 
-La copia versionada se regenera con:
+The versioned copy is regenerated with:
 
 ```bash
-make openapi   # o: python export_openapi.py
+make openapi   # or: python export_openapi.py
 ```
 
-Hay que regenerarla cada vez que se modifica una ruta o un esquema, para que los consumidores (backend principal, frontend) puedan leer el contrato sin levantar el servicio. Se puede importar en Postman/Insomnia o usar para generar clientes.
+It must be regenerated every time a route or schema changes, so that consumers (main backend, frontend) can read the contract without starting the service. It can be imported into Postman/Insomnia or used to generate clients.
 
 ## Endpoints
 
-No requieren autenticación (servicio interno). Los errores devuelven `{"detail": "..."}`; los de validación de parámetros, `422` con el formato estándar de FastAPI.
+No authentication required (internal service). Errors return `{"detail": "..."}`; parameter validation errors return `422` in the standard FastAPI format.
 
-| Método | Ruta                     | Descripción                                                        | Errores       |
-|--------|--------------------------|--------------------------------------------------------------------|---------------|
-| GET    | `/health`                | Health check (`OK` en texto plano)                                 | —             |
-| GET    | `/`                      | Redirige a `/health`                                               | —             |
-| GET    | `/bus_tickets/{ticket}`  | Obtener un pasaje por código de boleto                             | 404           |
-| POST   | `/bus_tickets/`          | Crear un pasaje                                                    | 404, 409, 422 |
-| GET    | `/terminal/`             | Listar terminales (ordenadas por nombre)                           | —             |
-| GET    | `/terminal/exist/`       | `?uuid=` → `{"exist": bool}` si la terminal existe                 | 422           |
-| GET    | `/terminal/trip/exist/`  | `?uuid=&license_plate=&start_date=` → si hay un viaje ese día      | 422           |
-| GET    | `/terminal/trip/`        | `?uuid=&start_date=&end_date=` → viajes de la terminal en el rango | 400, 404, 422 |
+| Method | Path                     | Description                                                      | Errors        |
+|--------|--------------------------|------------------------------------------------------------------|---------------|
+| GET    | `/health`                | Health check (`OK` as plain text)                                | —             |
+| GET    | `/`                      | Redirects to `/health`                                           | —             |
+| GET    | `/bus_tickets/{ticket}`  | Get a bus ticket by ticket code                                  | 404           |
+| POST   | `/bus_tickets/`          | Create a bus ticket                                              | 404, 409, 422 |
+| GET    | `/terminal/`             | List terminals (ordered by name)                                 | —             |
+| GET    | `/terminal/exist/`       | `?uuid=` → `{"exist": bool}` whether the terminal exists         | 422           |
+| GET    | `/terminal/trip/exist/`  | `?uuid=&license_plate=&start_date=` → whether there is a trip that day | 422     |
+| GET    | `/terminal/trip/`        | `?uuid=&start_date=&end_date=` → the terminal's trips in the range | 400, 404, 422 |
 
-### Ejemplos
+### Examples
 
 ```bash
 curl http://127.0.0.1:4990/terminal/
@@ -101,18 +101,18 @@ curl -X POST http://127.0.0.1:4990/bus_tickets/   -H "Content-Type: application/
   }'
 ```
 
-## Estructura del proyecto
+## Project structure
 
 ```
 backend-terminales/
 ├── app/
 │   ├── config.py
 │   ├── database.py
-│   ├── main.py              # instancia FastAPI y metadatos OpenAPI
+│   ├── main.py              # FastAPI instance and OpenAPI metadata
 │   ├── models/ticket.py     # Terminal, BusTicket (SQLAlchemy)
-│   ├── schemas/ticket.py    # esquemas Pydantic (con descripciones y ejemplos)
-│   └── routes/ticket.py     # rutas /bus_tickets y /terminal
-├── docs/openapi.json        # spec OpenAPI exportada
+│   ├── schemas/ticket.py    # Pydantic schemas (with descriptions and examples)
+│   └── routes/ticket.py     # /bus_tickets and /terminal routes
+├── docs/openapi.json        # exported OpenAPI spec
 ├── migrations/
 ├── export_openapi.py
 ├── migrate.py

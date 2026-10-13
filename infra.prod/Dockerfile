@@ -1,6 +1,6 @@
-# Build context: raíz del repo (docker build -f infra.prod/Dockerfile .)
+# Build context: repo root (docker build -f infra.prod/Dockerfile .)
 # En Railway: RAILWAY_DOCKERFILE_PATH=infra.prod/Dockerfile
-# Migraciones (p. ej. como Pre-Deploy Command en Railway): python migrate.py up
+# Migrations (e.g. as the Pre-Deploy Command on Railway): python migrate.py up
 
 FROM python:3.13-slim
 

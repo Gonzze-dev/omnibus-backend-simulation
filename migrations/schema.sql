@@ -1,13 +1,13 @@
--- Esquema completo y actual de backend-terminales (equivale a aplicar 001..NNN).
--- `python migrate.py up` lo usa para inicializar una base vacía.
--- Al agregar una migración nueva, reflejar el cambio también acá.
+-- Full, current schema of backend-terminales (equivalent to applying 001..NNN).
+-- `python migrate.py up` uses it to initialize an empty database.
+-- When adding a new migration, reflect the change here too.
 
 CREATE TABLE IF NOT EXISTS terminals (
     uuid VARCHAR(36)  PRIMARY KEY,
     name VARCHAR(255) NOT NULL UNIQUE
 );
 
-CREATE TABLE IF NOT EXISTS pasajes (
+CREATE TABLE IF NOT EXISTS bus_tickets (
     uuid              VARCHAR(36)  PRIMARY KEY,
     postal_code       VARCHAR(20)  NOT NULL,
     terminal_uuid     VARCHAR(36)  NOT NULL REFERENCES terminals (uuid),
@@ -21,5 +21,5 @@ CREATE TABLE IF NOT EXISTS pasajes (
     trip_city         JSON         NOT NULL
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS ix_pasajes_ticket ON pasajes (ticket);
-CREATE INDEX IF NOT EXISTS ix_pasajes_terminal_uuid ON pasajes (terminal_uuid);
+CREATE UNIQUE INDEX IF NOT EXISTS ix_bus_tickets_ticket ON bus_tickets (ticket);
+CREATE INDEX IF NOT EXISTS ix_bus_tickets_terminal_uuid ON bus_tickets (terminal_uuid);

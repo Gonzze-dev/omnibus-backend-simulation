@@ -1,30 +1,30 @@
-# BACKEND DE TERMINALES - LENGUAJE DE PROGRAMACIÓN Y LIBRERÍAS UTILIZADAS
+# TERMINALS BACKEND - PROGRAMMING LANGUAGE AND LIBRARIES USED
 
-Para el desarrollo del backend de terminales del presente trabajo, se ha seleccionado el lenguaje de programación Python. Esta elección se fundamenta en su simplicidad, su amplia adopción en el ecosistema de desarrollo web y la disponibilidad de librerías modernas que permiten construir APIs robustas con poco código. Python permite un desarrollo ágil, reduciendo significativamente el tiempo de implementación sin sacrificar la calidad del resultado.
+For the development of the terminals backend of this work, the Python programming language was selected. This choice is based on its simplicity, its wide adoption in the web development ecosystem and the availability of modern libraries that make it possible to build robust APIs with little code. Python enables agile development, significantly reducing implementation time without sacrificing the quality of the result.
 
-Una de las principales razones para su adopción en este componente es la disponibilidad del framework FastAPI, que permite construir servicios web de alto rendimiento con validación automática de datos y generación de documentación interactiva. A diferencia de otros frameworks más verbosos, FastAPI aprovecha las anotaciones de tipo de Python moderno para reducir el código necesario y detectar errores en tiempo de desarrollo. En el contexto de este proyecto, esto resulta conveniente ya que el servicio de terminales actúa como proveedor de datos para el backend principal, por lo que la claridad y confiabilidad de su interfaz son esenciales.
+One of the main reasons for adopting it in this component is the availability of the FastAPI framework, which makes it possible to build high-performance web services with automatic data validation and generation of interactive documentation. Unlike other, more verbose frameworks, FastAPI takes advantage of modern Python type annotations to reduce the code needed and detect errors at development time. In the context of this project, this is convenient because the terminals service acts as a data provider for the main backend, so the clarity and reliability of its interface are essential.
 
-Además, Python cuenta con SQLAlchemy como ORM (Object-Relational Mapper) de referencia, lo que permite interactuar con la base de datos PostgreSQL de forma segura y expresiva, sin necesidad de escribir SQL manualmente. Esto garantiza que el acceso a datos sea consistente en todo el servicio y facilita el mantenimiento a futuro.
+In addition, Python has SQLAlchemy as its reference ORM (Object-Relational Mapper), which makes it possible to interact with the PostgreSQL database in a safe and expressive way, without having to write SQL by hand. This ensures that data access is consistent across the whole service and makes future maintenance easier.
 
-## Librerías a utilizar
+## Libraries to be used
 
-Para el desarrollo del prototipo del presente trabajo se utilizaron varias librerías, las más importantes son FastAPI, SQLAlchemy, Pydantic, psycopg2 y pydantic-settings. En el anexo A del trabajo se presenta una breve descripción de cada una de las librerías utilizadas.
+Several libraries were used to develop the prototype of this work; the most important ones are FastAPI, SQLAlchemy, Pydantic, psycopg2 and pydantic-settings. Appendix A of the work gives a brief description of each of the libraries used.
 
 ---
 
-# PROTOTIPO DEL BACKEND DE TERMINALES
+# TERMINALS BACKEND PROTOTYPE
 
-En esta sección se describe cómo se estructuró e implementó el backend de terminales del sistema, incluyendo la organización del código, el modelo de datos y los aspectos más relevantes de cada componente.
+This section describes how the system's terminals backend was structured and implemented, including the code organization, the data model and the most relevant aspects of each component.
 
-El servicio sigue una arquitectura en capas sencilla, separando las responsabilidades entre modelos (estructura de la base de datos), esquemas (validación de datos de entrada y salida), rutas (controladores HTTP) y configuración. Esta separación facilita el mantenimiento y la evolución independiente de cada parte.
+The service follows a simple layered architecture, separating responsibilities between models (database structure), schemas (input and output data validation), routes (HTTP controllers) and configuration. This separation makes maintenance and the independent evolution of each part easier.
 
-## Punto de entrada de la aplicación
+## Application entry point
 
-La aplicación se inicializa en el módulo `app/main.py`. En este punto se crea la instancia principal de FastAPI, se crean automáticamente las tablas en la base de datos si no existen, y se registran los dos grupos de rutas del servicio.
+The application is initialized in the `app/main.py` module. Here the main FastAPI instance is created, the database tables are created automatically if they do not exist, and the service's two route groups are registered.
 
 ```python
 app = FastAPI(
-    title="API Terminales de Buses",
+    title="Bus Terminals API",
     description="Backend for bus terminal ticket management",
     version="1.0.0",
 )
@@ -32,13 +32,13 @@ app = FastAPI(
 app.include_router(bus_ticket_router)
 app.include_router(terminal_router)
 ```
-Figura 1, código del punto de entrada de la aplicación.
+Figure 1, application entry point code.
 
-La creación automática de tablas se realiza mediante `Base.metadata.create_all(bind=engine)`, que al arrancar el servidor compara el estado del modelo con el de la base de datos y genera las estructuras necesarias si no existen.
+Automatic table creation is done with `Base.metadata.create_all(bind=engine)`, which, when the server starts, compares the state of the model with that of the database and generates the necessary structures if they do not exist.
 
-## Configuración y conexión a la base de datos
+## Configuration and database connection
 
-La configuración del servicio se centraliza en `app/config.py` utilizando la librería pydantic-settings. Esto permite definir variables de entorno con un valor por defecto y cargarlas automáticamente desde un archivo `.env`, manteniendo los datos sensibles fuera del código fuente.
+The service configuration is centralized in `app/config.py` using the pydantic-settings library. This makes it possible to define environment variables with a default value and load them automatically from a `.env` file, keeping sensitive data out of the source code.
 
 ```python
 class Settings(BaseSettings):
@@ -47,78 +47,78 @@ class Settings(BaseSettings):
     class Config:
         env_file = ".env"
 ```
-Figura 2, código de configuración de variables de entorno.
+Figure 2, environment variable configuration code.
 
-La conexión a la base de datos se gestiona en `app/database.py` mediante SQLAlchemy. Se crea un motor de conexión y una fábrica de sesiones, y se expone una función `get_db()` que los endpoints utilizan como dependencia para obtener una sesión activa y cerrarla correctamente al finalizar cada petición.
+The database connection is managed in `app/database.py` with SQLAlchemy. A connection engine and a session factory are created, and a `get_db()` function is exposed, which the endpoints use as a dependency to obtain an active session and close it correctly at the end of each request.
 
-## Arquitectura
+## Architecture
 
-El proyecto sigue una estructura de directorios clara y bien definida:
+The project follows a clear and well-defined directory structure:
 
 ```
 backend-terminales/
 ├── app/
-│   ├── config.py       → Variables de entorno y configuración
-│   ├── database.py     → Conexión a la base de datos
-│   ├── main.py         → Punto de entrada de la aplicación
+│   ├── config.py       → Environment variables and configuration
+│   ├── database.py     → Database connection
+│   ├── main.py         → Application entry point
 │   ├── models/
-│   │   └── ticket.py   → Modelo de base de datos (BusTicket)
+│   │   └── ticket.py   → Database model (BusTicket)
 │   ├── schemas/
-│   │   └── ticket.py   → Esquemas de validación (Pydantic)
+│   │   └── ticket.py   → Validation schemas (Pydantic)
 │   └── routes/
-│       └── ticket.py   → Controladores HTTP y lógica de rutas
+│       └── ticket.py   → HTTP controllers and route logic
 ├── .env
 └── requirements.txt
 ```
-Figura 3, esquema de la arquitectura del servicio de terminales.
+Figure 3, architecture diagram of the terminals service.
 
-Base de datos: PostgreSQL con SQLAlchemy como ORM, usando UUIDs generados automáticamente como claves primarias.
+Database: PostgreSQL with SQLAlchemy as ORM, using automatically generated UUIDs as primary keys.
 
-## Modelo de Datos
+## Data Model
 
-### Pasaje de Ómnibus (pasajes)
+### Bus Ticket (bus_tickets)
 
-La tabla `pasajes` es la única entidad del sistema y almacena los datos de cada boleto de ómnibus emitido. Cada registro representa un pasaje vendido, incluyendo información sobre el pasajero, el vehículo y el recorrido.
+The `bus_tickets` table is the only entity of the system and stores the data of each bus ticket issued. Each record represents a ticket sold, including information about the passenger, the vehicle and the route.
 
-| Campo               | Tipo     | Descripción                                       |
+| Field               | Type     | Description                                       |
 |---------------------|----------|---------------------------------------------------|
-| uuid                | String   | Identificador único generado automáticamente      |
-| postal_code         | String   | Código postal de la terminal de origen            |
-| bus_terminal_name   | String   | Nombre de la terminal de ómnibus                  |
-| ticket              | String   | Código único del boleto (indexado)                |
-| dni                 | String   | Documento de identidad del pasajero               |
-| name                | String   | Nombre completo del pasajero                      |
-| bus_license_plate   | String   | Patente del colectivo                             |
-| enterprise          | String   | Empresa de transporte                             |
-| start_date          | DateTime | Fecha y hora de inicio del viaje                  |
-| end_date            | DateTime | Fecha y hora de fin del viaje                     |
-| trip_city           | JSON     | Lista de ciudades del recorrido con fechas        |
+| uuid                | String   | Automatically generated unique identifier         |
+| postal_code         | String   | Postal code of the origin terminal                |
+| bus_terminal_name   | String   | Name of the bus terminal                          |
+| ticket              | String   | Unique ticket code (indexed)                      |
+| dni                 | String   | Passenger's national ID document                  |
+| name                | String   | Passenger's full name                             |
+| bus_license_plate   | String   | Bus license plate                                 |
+| enterprise          | String   | Transport company                                 |
+| start_date          | DateTime | Trip start date and time                          |
+| end_date            | DateTime | Trip end date and time                            |
+| trip_city           | JSON     | List of route cities with dates                   |
 
-Figura 4, campos de la tabla pasajes en la base de datos.
+Figure 4, fields of the bus_tickets table in the database.
 
-El campo `trip_city` almacena en formato JSON una lista de objetos, donde cada uno contiene el nombre de la ciudad, la fecha de llegada y el orden en el itinerario. Este diseño permite representar viajes con múltiples escalas sin necesidad de una tabla adicional.
+The `trip_city` field stores a list of objects in JSON format, where each one contains the city name, the arrival date and its order in the itinerary. This design makes it possible to represent trips with multiple stops without needing an additional table.
 
-## Esquemas de validación
+## Validation schemas
 
-Los esquemas Pydantic definen la estructura esperada de los datos tanto en la entrada (peticiones) como en la salida (respuestas) de la API. Esto garantiza que los datos sean validados automáticamente antes de procesarse.
+The Pydantic schemas define the expected structure of the data both in the input (requests) and in the output (responses) of the API. This ensures that data is validated automatically before being processed.
 
-Los principales esquemas son:
+The main schemas are:
 
-- **TripCity**: representa una parada del recorrido, con nombre de ciudad, fechas y orden.
-- **BusTicketCreate**: datos requeridos para registrar un nuevo pasaje.
-- **BusTicketResponse**: datos devueltos al consultar un pasaje, incluye el `uuid` generado.
-- **TerminalItem**: representa una terminal con su `uuid` y nombre, usado para listar terminales.
-- **TerminalBusTicketsResponse**: respuesta al consultar los viajes de una terminal en un rango de fechas, incluye el nombre de la terminal y una lista de viajes.
+- **TripCity**: represents a stop on the route, with city name, dates and order.
+- **BusTicketCreate**: data required to register a new bus ticket.
+- **BusTicketResponse**: data returned when querying a bus ticket, includes the generated `uuid`.
+- **TerminalItem**: represents a terminal with its `uuid` and name, used to list terminals.
+- **TerminalBusTicketsResponse**: response when querying a terminal's trips in a date range, includes the terminal name and a list of trips.
 
-## Organización de rutas
+## Route organization
 
-Las rutas se organizan en dos grupos bien diferenciados, registrados en `app/routes/ticket.py`:
+Routes are organized into two clearly differentiated groups, registered in `app/routes/ticket.py`:
 
-**Bus Tickets** (`/bus_tickets`): agrupa los endpoints para la gestión de pasajes individuales. Permite consultar un pasaje por su código de boleto y registrar nuevos pasajes.
+**Bus Tickets** (`/bus_tickets`): groups the endpoints for managing individual bus tickets. It allows querying a bus ticket by its ticket code and registering new bus tickets.
 
-**Terminal** (`/terminal`): agrupa los endpoints orientados a la consulta de datos por terminal. Permite listar todas las terminales conocidas, verificar la existencia de una terminal o de un viaje, y obtener los viajes de una terminal en un rango de fechas.
+**Terminal** (`/terminal`): groups the endpoints oriented to querying data by terminal. It allows listing all known terminals, checking whether a terminal or a trip exists, and getting a terminal's trips in a date range.
 
-No se aplica autenticación en ninguna de las rutas, ya que este servicio opera como proveedor de datos interno dentro del sistema y se asume que solo es accesible desde la red interna del proyecto.
+No authentication is applied on any of the routes, since this service operates as an internal data provider within the system and is assumed to be reachable only from the project's internal network.
 
 ## Endpoints
 
@@ -126,102 +126,102 @@ No se aplica autenticación en ninguna de las rutas, ya que este servicio opera 
 
 **GET /health**
 
-Endpoint de verificación de estado del servidor. Permite comprobar que el servicio está en funcionamiento. Devuelve `OK` (texto plano) con status 200.
+Server status check endpoint. It makes it possible to verify that the service is up. It returns `OK` (plain text) with status 200.
 
-**GET /** redirige a `/health`.
+**GET /** redirects to `/health`.
 
 ### Bus Tickets (`/bus_tickets`)
 
 **GET /bus_tickets/{ticket}**
 
-Consulta los datos de un pasaje por su código de boleto. Si el código no existe, devuelve un error 404. Este endpoint es el que consume el backend principal para obtener los datos de un boleto al momento de que un usuario se registra en un viaje.
+Queries the data of a bus ticket by its ticket code. If the code does not exist, it returns a 404 error. This is the endpoint the main backend consumes to get a ticket's data when a user registers for a trip.
 
 **POST /bus_tickets/**
 
-Registra un nuevo pasaje en el sistema. Valida que no exista previamente un registro con el mismo código de boleto; si ya existe, devuelve un error 409 (conflicto). Devuelve el pasaje creado con su `uuid` generado.
+Registers a new bus ticket in the system. It validates that no record with the same ticket code already exists; if it does, it returns a 409 (conflict) error. It returns the created bus ticket with its generated `uuid`.
 
 ### Terminal (`/terminal`)
 
 **GET /terminal/**
 
-Lista todas las terminales de ómnibus conocidas en el sistema. Internamente agrupa los pasajes por nombre de terminal y devuelve una lista con el nombre y un `uuid` representativo de cada una. Este endpoint es utilizado por el backend principal para mostrar al usuario las terminales disponibles.
+Lists all the bus terminals known to the system. Internally it groups the bus tickets by terminal name and returns a list with the name and a representative `uuid` for each one. The main backend uses this endpoint to show the user the available terminals.
 
 **GET /terminal/exist/?uuid={uuid}**
 
-Verifica si existe en el sistema un registro con el `uuid` indicado. Devuelve `{"exist": true}` o `{"exist": false}`. El backend principal lo utiliza para validar que una terminal exista antes de crear registros internos asociados a ella.
+Checks whether a record with the given `uuid` exists in the system. It returns `{"exist": true}` or `{"exist": false}`. The main backend uses it to validate that a terminal exists before creating internal records associated with it.
 
-**GET /terminal/trip/exist/?uuid={uuid}&license_plate={patente}&start_date={fecha}**
+**GET /terminal/trip/exist/?uuid={uuid}&license_plate={license_plate}&start_date={date}**
 
-Verifica si existe un pasaje con el `uuid` y la patente indicados, cuyo viaje se superponga con el día calendario de la fecha proporcionada. Es utilizado por el backend principal para validar que un viaje programado exista antes de enviar notificaciones de demora a los pasajeros.
+Checks whether there is a bus ticket with the given `uuid` and license plate whose trip overlaps the calendar day of the given date. The main backend uses it to validate that a scheduled trip exists before sending delay notifications to passengers.
 
-**GET /terminal/trip/?uuid={uuid}&start_date={inicio}&end_date={fin}**
+**GET /terminal/trip/?uuid={uuid}&start_date={start}&end_date={end}**
 
-Devuelve todos los pasajes asociados a la terminal identificada por el `uuid` dado, cuyos viajes se superpongan con el rango de fechas indicado. La respuesta incluye el nombre de la terminal y una lista con la patente, empresa, y fechas de cada viaje. Este endpoint es utilizado por el microservicio de OCR (a través del backend principal) para determinar qué colectivos se esperan en una terminal en un momento determinado.
+Returns all bus tickets associated with the terminal identified by the given `uuid` whose trips overlap the given date range. The response includes the terminal name and a list with the license plate, company and dates of each trip. The OCR microservice uses this endpoint (through the main backend) to determine which buses are expected at a terminal at a given time.
 
-## Integración con el resto del sistema
+## Integration with the rest of the system
 
-Este servicio actúa como el sistema upstream de terminales dentro de la arquitectura general. El backend principal lo consume de forma transparente a través de su variable de entorno `EXTERNAL_TERMINAL_UPSTREAM_URL`, que apunta a la dirección donde corre este servicio.
+This service acts as the upstream terminals system within the overall architecture. The main backend consumes it transparently through its `EXTERNAL_TERMINAL_UPSTREAM_URL` environment variable, which points to the address where this service runs.
 
-Las integraciones concretas son tres:
+There are three concrete integrations:
 
-1. **Consulta de boletos**: cuando un usuario se registra en un viaje desde la aplicación, el backend principal llama a `GET /bus_tickets/{ticket}` para obtener los datos del pasaje (patente, empresa, ciudades del recorrido) y verificar que el boleto existe.
+1. **Ticket lookup**: when a user registers for a trip from the application, the main backend calls `GET /bus_tickets/{ticket}` to get the bus ticket data (license plate, company, route cities) and verify that the ticket exists.
 
-2. **Verificación de terminales**: cuando un super administrador crea una terminal interna, el backend principal llama a `GET /terminal/exist/` para comprobar que la terminal referenciada existe en este sistema antes de crear el registro interno.
+2. **Terminal verification**: when a super administrator creates an internal terminal, the main backend calls `GET /terminal/exist/` to check that the referenced terminal exists in this system before creating the internal record.
 
-3. **Verificación de viajes para notificaciones de demora**: cuando un administrador quiere enviar una notificación de demora, el backend principal llama a `GET /terminal/trip/exist/` para confirmar que el viaje programado existe y que la patente y fecha son correctas.
+3. **Trip verification for delay notifications**: when an administrator wants to send a delay notification, the main backend calls `GET /terminal/trip/exist/` to confirm that the scheduled trip exists and that the license plate and date are correct.
 
 ---
 
-# ANEXO A
+# APPENDIX A
 
-A continuación, se presenta una breve descripción de algunas de las librerías más importantes que se han utilizado para llevar a cabo el desarrollo del backend de terminales del presente trabajo.
+Below is a brief description of some of the most important libraries used to develop the terminals backend of this work.
 
 ## FastAPI
 
-FastAPI es un framework web de código abierto para Python, orientado al desarrollo de APIs RESTful modernas de alto rendimiento. Es una de las librerías más populares del ecosistema Python cuando se trata de construir servicios HTTP. FastAPI es el framework principal para el manejo de rutas, validación de datos y peticiones HTTP en este servicio. Permite definir endpoints de forma declarativa utilizando anotaciones de tipo de Python, generar documentación interactiva automáticamente con Swagger UI, y manejar errores de forma coherente. Sus principales beneficios son: su altísima velocidad de ejecución, la validación automática de datos de entrada y salida mediante Pydantic, la generación de documentación sin configuración adicional, y su soporte nativo para programación asíncrona.
+FastAPI is an open-source web framework for Python, aimed at developing modern, high-performance RESTful APIs. It is one of the most popular libraries in the Python ecosystem for building HTTP services. FastAPI is the main framework for routing, data validation and HTTP requests in this service. It makes it possible to define endpoints declaratively using Python type annotations, automatically generate interactive documentation with Swagger UI, and handle errors consistently. Its main benefits are: its very high execution speed, automatic validation of input and output data through Pydantic, documentation generation with no additional configuration, and its native support for asynchronous programming.
 
 ## SQLAlchemy
 
-SQLAlchemy es una librería de código abierto para Python que implementa el patrón ORM (Object-Relational Mapper) y también ofrece acceso directo a SQL. Es una de las herramientas más consolidadas del ecosistema Python para la interacción con bases de datos relacionales. SQLAlchemy es la librería principal para el acceso a la base de datos PostgreSQL en este servicio. Permite mapear clases de Python a tablas relacionales, ejecutar consultas de lectura, escritura, actualización y eliminación, y gestionar la conexión a la base de datos de forma segura mediante el patrón de sesión. Algunos de sus beneficios son: la reducción del código repetitivo para acceso a datos, soporte para múltiples motores de base de datos, y una integración fluida con el ecosistema de Python.
+SQLAlchemy is an open-source Python library that implements the ORM (Object-Relational Mapper) pattern and also offers direct SQL access. It is one of the most established tools in the Python ecosystem for interacting with relational databases. SQLAlchemy is the main library for accessing the PostgreSQL database in this service. It makes it possible to map Python classes to relational tables, run read, write, update and delete queries, and manage the database connection safely through the session pattern. Some of its benefits are: less repetitive data-access code, support for multiple database engines, and smooth integration with the Python ecosystem.
 
 ## Pydantic
 
-Pydantic es una librería de código abierto para Python orientada a la validación de datos y la gestión de configuraciones mediante anotaciones de tipo. Es la herramienta estándar de validación de datos en el ecosistema FastAPI. Pydantic es la librería utilizada para definir los esquemas de entrada y salida de la API, garantizando que los datos recibidos y enviados cumplan siempre con la estructura esperada. Cuando un cliente envía datos incorrectos, Pydantic rechaza la petición automáticamente con un mensaje de error descriptivo sin necesidad de código de validación adicional. Sus principales ventajas son: la validación automática sin código extra, la serialización y deserialización de datos, y la integración nativa con FastAPI.
+Pydantic is an open-source Python library for data validation and settings management using type annotations. It is the standard data validation tool in the FastAPI ecosystem. Pydantic is the library used to define the API's input and output schemas, ensuring that the data received and sent always matches the expected structure. When a client sends incorrect data, Pydantic rejects the request automatically with a descriptive error message, with no additional validation code needed. Its main advantages are: automatic validation with no extra code, data serialization and deserialization, and native integration with FastAPI.
 
 ## psycopg2-binary
 
-psycopg2 es el adaptador de base de datos PostgreSQL más utilizado en el ecosistema Python. Es la librería que permite a SQLAlchemy comunicarse con PostgreSQL de forma nativa. psycopg2-binary es la versión precompilada del adaptador, que simplifica la instalación al no requerir dependencias del sistema operativo. En este servicio actúa como el puente entre SQLAlchemy y PostgreSQL, gestionando las conexiones, las transacciones y la ejecución de sentencias SQL a bajo nivel. Su principal ventaja es ser el estándar de facto para conectar Python con PostgreSQL, con soporte completo para las características avanzadas de la base de datos.
+psycopg2 is the most widely used PostgreSQL database adapter in the Python ecosystem. It is the library that lets SQLAlchemy communicate natively with PostgreSQL. psycopg2-binary is the precompiled version of the adapter, which simplifies installation by not requiring operating system dependencies. In this service it acts as the bridge between SQLAlchemy and PostgreSQL, managing connections, transactions and low-level execution of SQL statements. Its main advantage is being the de facto standard for connecting Python to PostgreSQL, with full support for the database's advanced features.
 
 ## pydantic-settings
 
-pydantic-settings es una extensión de Pydantic orientada a la gestión de configuraciones de aplicaciones. Permite definir las variables de entorno de la aplicación como un modelo Pydantic tipado, cargándolas automáticamente desde el entorno del sistema operativo o desde un archivo `.env`. En este servicio se utiliza para centralizar la configuración (principalmente la URL de la base de datos) en una única clase `Settings`, evitando referencias dispersas a variables de entorno a lo largo del código. Sus ventajas son: la validación automática de las variables de configuración al arrancar la aplicación, la separación clara entre código y configuración, y la compatibilidad con los estándares de la metodología Twelve-Factor App.
+pydantic-settings is a Pydantic extension aimed at application settings management. It makes it possible to define the application's environment variables as a typed Pydantic model, loading them automatically from the operating system environment or from a `.env` file. In this service it is used to centralize the configuration (mainly the database URL) in a single `Settings` class, avoiding scattered references to environment variables throughout the code. Its advantages are: automatic validation of configuration variables when the application starts, a clear separation between code and configuration, and compatibility with the Twelve-Factor App methodology.
 
 ## python-dotenv
 
-python-dotenv es una librería de código abierto para Python que permite cargar variables de entorno desde un archivo `.env`. Es una de las herramientas más utilizadas para gestionar la configuración de aplicaciones en distintos entornos de desarrollo. python-dotenv se utiliza para simplificar la configuración del servicio en entornos de desarrollo, permitiendo definir en un único archivo todas las variables del sistema (como la cadena de conexión a la base de datos) sin necesidad de definirlas manualmente en el entorno del sistema operativo. Sus beneficios son: la separación clara entre código y configuración, y la facilidad para manejar múltiples entornos sin modificar el código.
+python-dotenv is an open-source Python library that loads environment variables from a `.env` file. It is one of the most widely used tools for managing application configuration across different development environments. python-dotenv is used to simplify the service's configuration in development environments, making it possible to define all the system's variables (such as the database connection string) in a single file without having to set them manually in the operating system environment. Its benefits are: a clear separation between code and configuration, and the ease of handling multiple environments without modifying the code.
 
 ---
 
-# ANEXO B
+# APPENDIX B
 
-A continuación, se presenta una breve descripción de algunos conceptos y estándares técnicos fundamentales que se han empleado a lo largo del desarrollo del backend de terminales del presente trabajo.
+Below is a brief description of some fundamental technical concepts and standards used throughout the development of the terminals backend of this work.
 
 ## ORM (Object-Relational Mapper)
 
-Un ORM, cuyas siglas corresponden a Object-Relational Mapper, es una técnica de programación que permite interactuar con una base de datos relacional utilizando objetos del lenguaje de programación en lugar de sentencias SQL directas. El ORM se encarga de traducir automáticamente las operaciones sobre objetos (crear, leer, actualizar, eliminar) en las consultas SQL correspondientes. En este servicio, SQLAlchemy cumple el rol de ORM: la clase `BusTicket` de Python está mapeada directamente a la tabla `pasajes` de PostgreSQL, y todas las operaciones de base de datos se realizan mediante métodos sobre esa clase. Las principales ventajas de este enfoque son: la reducción del código repetitivo, la independencia del motor de base de datos, y la detección temprana de errores gracias al sistema de tipos.
+An ORM, short for Object-Relational Mapper, is a programming technique that makes it possible to interact with a relational database using objects of the programming language instead of direct SQL statements. The ORM takes care of automatically translating operations on objects (create, read, update, delete) into the corresponding SQL queries. In this service, SQLAlchemy plays the role of ORM: the Python `BusTicket` class is mapped directly to the PostgreSQL `bus_tickets` table, and all database operations are performed through methods on that class. The main advantages of this approach are: less repetitive code, independence from the database engine, and early error detection thanks to the type system.
 
-## UUID (Identificador Único Universal)
+## UUID (Universally Unique Identifier)
 
-Un UUID, cuyas siglas corresponden a Universally Unique Identifier, es un número de 128 bits generado de forma que su probabilidad de colisión con cualquier otro UUID generado en cualquier momento y lugar sea prácticamente nula. Es el estándar más utilizado para identificar recursos de forma única en sistemas distribuidos. En este servicio, cada pasaje almacenado en la base de datos recibe un UUID generado automáticamente como clave primaria. Esto permite que los registros sean identificados de forma segura incluso en escenarios donde múltiples instancias del servicio estén operando simultáneamente, y facilita la referenciación cruzada desde otros servicios del sistema (como el backend principal) sin riesgo de ambigüedad.
+A UUID, short for Universally Unique Identifier, is a 128-bit number generated so that its probability of colliding with any other UUID generated at any time and place is practically zero. It is the most widely used standard for uniquely identifying resources in distributed systems. In this service, each bus ticket stored in the database receives an automatically generated UUID as its primary key. This allows records to be identified safely even in scenarios where multiple instances of the service are running simultaneously, and makes cross-referencing from other services of the system (such as the main backend) possible without any risk of ambiguity.
 
 ## JSON (JavaScript Object Notation)
 
-JSON, cuyas siglas corresponden a JavaScript Object Notation, es un formato de intercambio de datos ligero y legible por humanos basado en la sintaxis de objetos de JavaScript. Es el formato estándar para la comunicación entre servicios web modernos y la representación de datos semiestructurados. En este servicio, JSON cumple dos funciones: por un lado, es el formato de todas las respuestas de la API (siguiendo la convención RESTful); por otro, es el tipo de dato utilizado para almacenar el campo `trip_city` de cada pasaje en la base de datos PostgreSQL, lo que permite representar el itinerario completo del viaje (con múltiples ciudades y fechas) en un único campo sin necesidad de una tabla separada.
+JSON, short for JavaScript Object Notation, is a lightweight, human-readable data interchange format based on JavaScript object syntax. It is the standard format for communication between modern web services and for representing semi-structured data. In this service, JSON fulfills two functions: on one hand, it is the format of all API responses (following the RESTful convention); on the other, it is the data type used to store the `trip_city` field of each bus ticket in the PostgreSQL database, which makes it possible to represent the full trip itinerary (with multiple cities and dates) in a single field without needing a separate table.
 
-## API RESTful
+## RESTful API
 
-REST, cuyas siglas corresponden a Representational State Transfer, es un estilo arquitectónico para el diseño de sistemas distribuidos. Una API se considera RESTful cuando sigue un conjunto de restricciones fundamentales: arquitectura cliente-servidor, comunicación sin estado (cada petición contiene toda la información necesaria para procesarse), uso de recursos identificados mediante URLs y aprovechamiento de los métodos del protocolo HTTP. En este servicio, toda la interfaz está diseñada siguiendo este estilo. Cada recurso del dominio (pasajes, terminales, viajes) se expone con su propia URL, y las operaciones se realizan utilizando los métodos HTTP correspondientes (GET para consultar, POST para crear). Las respuestas se devuelven siempre en formato JSON, estableciendo contratos de comunicación claros para los demás servicios del sistema que consumen esta API.
+REST, short for Representational State Transfer, is an architectural style for designing distributed systems. An API is considered RESTful when it follows a set of fundamental constraints: client-server architecture, stateless communication (each request contains all the information needed to process it), use of resources identified by URLs and use of the HTTP protocol methods. In this service, the entire interface is designed following this style. Each domain resource (bus tickets, terminals, trips) is exposed with its own URL, and operations are performed using the corresponding HTTP methods (GET to query, POST to create). Responses are always returned in JSON format, establishing clear communication contracts for the other services of the system that consume this API.
 
-## Variables de entorno (.env)
+## Environment variables (.env)
 
-Las variables de entorno son valores de configuración definidos fuera del código fuente de una aplicación, que el sistema operativo o un archivo de configuración ponen a disposición del proceso en tiempo de ejecución. El uso de variables de entorno es una práctica recomendada por la metodología Twelve-Factor App para separar la configuración del código, evitando que datos sensibles queden expuestos en el repositorio. En este servicio, las variables de entorno se utilizan para centralizar la cadena de conexión a la base de datos PostgreSQL. Este valor se define en un archivo `.env` que no se incluye en el control de versiones, y es cargado automáticamente al inicio de la aplicación mediante pydantic-settings y python-dotenv. Esto permite operar con distintas configuraciones en desarrollo y producción sin modificar una sola línea de código.
+Environment variables are configuration values defined outside an application's source code, which the operating system or a configuration file makes available to the process at runtime. Using environment variables is a practice recommended by the Twelve-Factor App methodology to separate configuration from code, preventing sensitive data from being exposed in the repository. In this service, environment variables are used to centralize the PostgreSQL database connection string. This value is defined in a `.env` file that is not included in version control, and is loaded automatically when the application starts through pydantic-settings and python-dotenv. This makes it possible to run with different configurations in development and production without changing a single line of code.

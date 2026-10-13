@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "API Terminales de Buses",
-    "summary": "Gestión de terminales y pasajes de ómnibus",
-    "description": "\nServicio upstream de terminales de ómnibus. Expone las terminales y los\npasajes vendidos en ellas, y es consumido por el backend principal\n(`EXTERNAL_TERMINAL_UPSTREAM_URL`) y, a través de él, por el microservicio de OCR.\n\n**Autenticación:** ninguna. Es un servicio interno accesible solo desde la red del sistema.\n\n**Fechas:** ISO 8601 (`2026-03-30T06:00:00`). Las fechas sin zona horaria se\ninterpretan tal como están guardadas en la base.\n\n**Errores:** las respuestas de error tienen la forma `{\"detail\": \"...\"}`. Los\nerrores de validación (422) siguen el formato estándar de FastAPI.\n",
+    "title": "Bus Terminals API",
+    "summary": "Bus terminal and bus ticket management",
+    "description": "\nUpstream bus terminal service. Exposes the terminals and the bus tickets\nsold at them, and is consumed by the main backend\n(`EXTERNAL_TERMINAL_UPSTREAM_URL`) and, through it, by the OCR microservice.\n\n**Authentication:** none. It is an internal service reachable only from the system network.\n\n**Dates:** ISO 8601 (`2026-03-30T06:00:00`). Dates without a time zone are\ninterpreted exactly as stored in the database.\n\n**Errors:** error responses have the shape `{\"detail\": \"...\"}`. Validation\nerrors (422) follow the standard FastAPI format.\n",
     "version": "1.0.0"
   },
   "paths": {
@@ -12,8 +12,8 @@
         "tags": [
           "Bus Tickets"
         ],
-        "summary": "Obtener pasaje por código de boleto",
-        "description": "Devuelve los datos completos de un pasaje (pasajero, colectivo, fechas y\nparadas). Lo consume el backend principal cuando un usuario se registra\nen un viaje.",
+        "summary": "Get bus ticket by ticket code",
+        "description": "Returns the full data of a bus ticket (passenger, bus, dates and\nstops). The main backend consumes it when a user registers for a\ntrip.",
         "operationId": "get_bus_ticket_by_ticket_bus_tickets__ticket__get",
         "parameters": [
           {
@@ -38,7 +38,7 @@
             }
           },
           "404": {
-            "description": "No existe un pasaje con ese código",
+            "description": "No bus ticket exists with that code",
             "content": {
               "application/json": {
                 "schema": {
@@ -65,8 +65,8 @@
         "tags": [
           "Bus Tickets"
         ],
-        "summary": "Crear pasaje",
-        "description": "Registra un pasaje nuevo. El código `ticket` debe ser único y\n`terminal_uuid` debe referenciar una terminal existente.",
+        "summary": "Create bus ticket",
+        "description": "Registers a new bus ticket. The `ticket` code must be unique and\n`terminal_uuid` must reference an existing terminal.",
         "operationId": "create_bus_ticket_bus_tickets__post",
         "requestBody": {
           "content": {
@@ -90,7 +90,7 @@
             }
           },
           "404": {
-            "description": "La terminal indicada no existe",
+            "description": "The given terminal does not exist",
             "content": {
               "application/json": {
                 "schema": {
@@ -100,7 +100,7 @@
             }
           },
           "409": {
-            "description": "Ya existe un pasaje con ese código de boleto",
+            "description": "A bus ticket with that ticket code already exists",
             "content": {
               "application/json": {
                 "schema": {
@@ -127,8 +127,8 @@
         "tags": [
           "Terminal"
         ],
-        "summary": "Listar terminales",
-        "description": "Todas las terminales registradas, ordenadas por nombre.",
+        "summary": "List terminals",
+        "description": "All registered terminals, ordered by name.",
         "operationId": "list_terminals_terminal__get",
         "responses": {
           "200": {
@@ -153,8 +153,8 @@
         "tags": [
           "Terminal"
         ],
-        "summary": "Verificar si existe una terminal",
-        "description": "Indica si existe una terminal con ese UUID. El backend principal lo usa\nantes de crear una terminal interna asociada.",
+        "summary": "Check whether a terminal exists",
+        "description": "Tells whether a terminal with that UUID exists. The main backend uses it\nbefore creating an associated internal terminal.",
         "operationId": "exist_terminal_terminal_exist__get",
         "parameters": [
           {
@@ -164,10 +164,10 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "description": "UUID de la terminal",
+              "description": "Terminal UUID",
               "title": "Uuid"
             },
-            "description": "UUID de la terminal"
+            "description": "Terminal UUID"
           }
         ],
         "responses": {
@@ -199,8 +199,8 @@
         "tags": [
           "Terminal"
         ],
-        "summary": "Verificar si existe un viaje en una fecha",
-        "description": "Indica si la terminal tiene un pasaje con esa patente cuyo viaje se\nsuperpone con el día calendario de `start_date` (00:00–24:00 de esa\nfecha). Lo usa el backend principal antes de enviar notificaciones de\ndemora.",
+        "summary": "Check whether a trip exists on a date",
+        "description": "Tells whether the terminal has a bus ticket with that license plate whose\ntrip overlaps the calendar day of `start_date` (00:00–24:00 of that\ndate). The main backend uses it before sending delay\nnotifications.",
         "operationId": "exist_trip_terminal_trip_exist__get",
         "parameters": [
           {
@@ -210,10 +210,10 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "description": "UUID de la terminal",
+              "description": "Terminal UUID",
               "title": "Uuid"
             },
-            "description": "UUID de la terminal"
+            "description": "Terminal UUID"
           },
           {
             "name": "license_plate",
@@ -221,10 +221,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "description": "Patente del colectivo",
+              "description": "Bus license plate",
               "title": "License Plate"
             },
-            "description": "Patente del colectivo"
+            "description": "Bus license plate"
           },
           {
             "name": "start_date",
@@ -233,10 +233,10 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "description": "Cualquier instante del día calendario a verificar (p. ej. 2026-03-30)",
+              "description": "Any instant of the calendar day to check (e.g. 2026-03-30)",
               "title": "Start Date"
             },
-            "description": "Cualquier instante del día calendario a verificar (p. ej. 2026-03-30)"
+            "description": "Any instant of the calendar day to check (e.g. 2026-03-30)"
           }
         ],
         "responses": {
@@ -268,8 +268,8 @@
         "tags": [
           "Terminal"
         ],
-        "summary": "Listar viajes de una terminal en un rango",
-        "description": "Devuelve los viajes de la terminal que se superponen con el rango\n`[start_date, end_date]`, ordenados por salida. Lo usa el microservicio\nde OCR (vía backend principal) para saber qué colectivos se esperan.",
+        "summary": "List a terminal's trips in a range",
+        "description": "Returns the terminal's trips that overlap the range\n`[start_date, end_date]`, ordered by departure. The OCR microservice\nuses it (through the main backend) to know which buses are expected.",
         "operationId": "get_bus_tickets_by_terminal_terminal_trip__get",
         "parameters": [
           {
@@ -279,10 +279,10 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "description": "UUID de la terminal",
+              "description": "Terminal UUID",
               "title": "Uuid"
             },
-            "description": "UUID de la terminal"
+            "description": "Terminal UUID"
           },
           {
             "name": "start_date",
@@ -291,10 +291,10 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "description": "Inicio del rango (inclusive)",
+              "description": "Range start (inclusive)",
               "title": "Start Date"
             },
-            "description": "Inicio del rango (inclusive)"
+            "description": "Range start (inclusive)"
           },
           {
             "name": "end_date",
@@ -303,10 +303,10 @@
             "schema": {
               "type": "string",
               "format": "date-time",
-              "description": "Fin del rango (inclusive)",
+              "description": "Range end (inclusive)",
               "title": "End Date"
             },
-            "description": "Fin del rango (inclusive)"
+            "description": "Range end (inclusive)"
           }
         ],
         "responses": {
@@ -321,7 +321,7 @@
             }
           },
           "400": {
-            "description": "`start_date` es posterior a `end_date`",
+            "description": "`start_date` is after `end_date`",
             "content": {
               "application/json": {
                 "schema": {
@@ -331,7 +331,7 @@
             }
           },
           "404": {
-            "description": "La terminal no existe",
+            "description": "The terminal does not exist",
             "content": {
               "application/json": {
                 "schema": {
@@ -359,7 +359,7 @@
           "Health"
         ],
         "summary": "Health check",
-        "description": "Devuelve `OK` en texto plano si el servicio está en funcionamiento.",
+        "description": "Returns `OK` as plain text if the service is up.",
         "operationId": "health_check_health_get",
         "responses": {
           "200": {
@@ -384,7 +384,7 @@
           "postal_code": {
             "type": "string",
             "title": "Postal Code",
-            "description": "Código postal de la terminal de origen",
+            "description": "Postal code of the origin terminal",
             "examples": [
               "2000"
             ]
@@ -392,7 +392,7 @@
           "terminal_uuid": {
             "type": "string",
             "title": "Terminal Uuid",
-            "description": "UUID de la terminal a la que pertenece el pasaje",
+            "description": "UUID of the terminal the bus ticket belongs to",
             "examples": [
               "c2bcc293-5b53-4bb2-963c-8f5fe0b91373"
             ]
@@ -400,7 +400,7 @@
           "ticket": {
             "type": "string",
             "title": "Ticket",
-            "description": "Código de boleto (único)",
+            "description": "Ticket code (unique)",
             "examples": [
               "TKT-000123"
             ]
@@ -408,7 +408,7 @@
           "dni": {
             "type": "string",
             "title": "Dni",
-            "description": "DNI del pasajero",
+            "description": "Passenger DNI (national ID)",
             "examples": [
               "40123456"
             ]
@@ -416,7 +416,7 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "Nombre completo del pasajero",
+            "description": "Passenger full name",
             "examples": [
               "Juan Pérez"
             ]
@@ -424,7 +424,7 @@
           "bus_license_plate": {
             "type": "string",
             "title": "Bus License Plate",
-            "description": "Patente del colectivo",
+            "description": "Bus license plate",
             "examples": [
               "AB123CD"
             ]
@@ -432,7 +432,7 @@
           "enterprise": {
             "type": "string",
             "title": "Enterprise",
-            "description": "Empresa de transporte",
+            "description": "Transport company",
             "examples": [
               "Flecha Bus"
             ]
@@ -441,7 +441,7 @@
             "type": "string",
             "format": "date-time",
             "title": "Start Date",
-            "description": "Fecha y hora de salida del viaje",
+            "description": "Trip departure date and time",
             "examples": [
               "2026-03-30T06:00:00"
             ]
@@ -450,7 +450,7 @@
             "type": "string",
             "format": "date-time",
             "title": "End Date",
-            "description": "Fecha y hora de llegada del viaje",
+            "description": "Trip arrival date and time",
             "examples": [
               "2026-03-30T14:00:00"
             ]
@@ -461,7 +461,7 @@
             },
             "type": "array",
             "title": "Trip City",
-            "description": "Paradas intermedias del recorrido, ordenadas por `order`"
+            "description": "Intermediate stops of the route, ordered by `order`"
           }
         },
         "type": "object",
@@ -484,7 +484,7 @@
           "postal_code": {
             "type": "string",
             "title": "Postal Code",
-            "description": "Código postal de la terminal de origen",
+            "description": "Postal code of the origin terminal",
             "examples": [
               "2000"
             ]
@@ -492,7 +492,7 @@
           "terminal_uuid": {
             "type": "string",
             "title": "Terminal Uuid",
-            "description": "UUID de la terminal a la que pertenece el pasaje",
+            "description": "UUID of the terminal the bus ticket belongs to",
             "examples": [
               "c2bcc293-5b53-4bb2-963c-8f5fe0b91373"
             ]
@@ -500,7 +500,7 @@
           "ticket": {
             "type": "string",
             "title": "Ticket",
-            "description": "Código de boleto (único)",
+            "description": "Ticket code (unique)",
             "examples": [
               "TKT-000123"
             ]
@@ -508,7 +508,7 @@
           "dni": {
             "type": "string",
             "title": "Dni",
-            "description": "DNI del pasajero",
+            "description": "Passenger DNI (national ID)",
             "examples": [
               "40123456"
             ]
@@ -516,7 +516,7 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "Nombre completo del pasajero",
+            "description": "Passenger full name",
             "examples": [
               "Juan Pérez"
             ]
@@ -524,7 +524,7 @@
           "bus_license_plate": {
             "type": "string",
             "title": "Bus License Plate",
-            "description": "Patente del colectivo",
+            "description": "Bus license plate",
             "examples": [
               "AB123CD"
             ]
@@ -532,7 +532,7 @@
           "enterprise": {
             "type": "string",
             "title": "Enterprise",
-            "description": "Empresa de transporte",
+            "description": "Transport company",
             "examples": [
               "Flecha Bus"
             ]
@@ -541,7 +541,7 @@
             "type": "string",
             "format": "date-time",
             "title": "Start Date",
-            "description": "Fecha y hora de salida del viaje",
+            "description": "Trip departure date and time",
             "examples": [
               "2026-03-30T06:00:00"
             ]
@@ -550,7 +550,7 @@
             "type": "string",
             "format": "date-time",
             "title": "End Date",
-            "description": "Fecha y hora de llegada del viaje",
+            "description": "Trip arrival date and time",
             "examples": [
               "2026-03-30T14:00:00"
             ]
@@ -561,12 +561,12 @@
             },
             "type": "array",
             "title": "Trip City",
-            "description": "Paradas intermedias del recorrido, ordenadas por `order`"
+            "description": "Intermediate stops of the route, ordered by `order`"
           },
           "uuid": {
             "type": "string",
             "title": "Uuid",
-            "description": "Identificador generado del pasaje",
+            "description": "Generated bus ticket identifier",
             "examples": [
               "3f1c9a52-8d0e-4b7a-9e61-2a4c5d6e7f80"
             ]
@@ -593,7 +593,7 @@
           "detail": {
             "type": "string",
             "title": "Detail",
-            "description": "Mensaje de error",
+            "description": "Error message",
             "examples": [
               "Terminal not found"
             ]
@@ -610,7 +610,7 @@
           "exist": {
             "type": "boolean",
             "title": "Exist",
-            "description": "`true` si el recurso consultado existe",
+            "description": "`true` if the requested resource exists",
             "examples": [
               true
             ]
@@ -640,7 +640,7 @@
           "license_plate": {
             "type": "string",
             "title": "License Plate",
-            "description": "Patente del colectivo",
+            "description": "Bus license plate",
             "examples": [
               "AB123CD"
             ]
@@ -648,7 +648,7 @@
           "enterprise": {
             "type": "string",
             "title": "Enterprise",
-            "description": "Empresa de transporte",
+            "description": "Transport company",
             "examples": [
               "Flecha Bus"
             ]
@@ -656,7 +656,7 @@
           "start_date": {
             "type": "string",
             "title": "Start Date",
-            "description": "Salida del viaje (ISO 8601)",
+            "description": "Trip departure (ISO 8601)",
             "examples": [
               "2026-03-30T06:00:00"
             ]
@@ -664,7 +664,7 @@
           "end_date": {
             "type": "string",
             "title": "End Date",
-            "description": "Llegada del viaje (ISO 8601)",
+            "description": "Trip arrival (ISO 8601)",
             "examples": [
               "2026-03-30T14:00:00"
             ]
@@ -684,7 +684,7 @@
           "name": {
             "type": "string",
             "title": "Name",
-            "description": "Nombre de la terminal",
+            "description": "Terminal name",
             "examples": [
               "Terminal Córdoba"
             ]
@@ -695,7 +695,7 @@
             },
             "type": "array",
             "title": "Payload",
-            "description": "Viajes que se superponen con el rango pedido"
+            "description": "Trips that overlap the requested range"
           }
         },
         "type": "object",
@@ -710,7 +710,7 @@
           "uuid": {
             "type": "string",
             "title": "Uuid",
-            "description": "UUID de la terminal",
+            "description": "Terminal UUID",
             "examples": [
               "c2bcc293-5b53-4bb2-963c-8f5fe0b91373"
             ]
@@ -718,7 +718,7 @@
           "terminal": {
             "type": "string",
             "title": "Terminal",
-            "description": "Nombre de la terminal",
+            "description": "Terminal name",
             "examples": [
               "Terminal Córdoba"
             ]
@@ -736,7 +736,7 @@
           "city_name": {
             "type": "string",
             "title": "City Name",
-            "description": "Nombre de la ciudad del recorrido",
+            "description": "Name of the route city",
             "examples": [
               "Rosario"
             ]
@@ -745,7 +745,7 @@
             "type": "string",
             "format": "date-time",
             "title": "Start Date",
-            "description": "Llegada a la ciudad",
+            "description": "Arrival at the city",
             "examples": [
               "2026-03-30T08:00:00"
             ]
@@ -754,7 +754,7 @@
             "type": "string",
             "format": "date-time",
             "title": "End Date",
-            "description": "Salida de la ciudad",
+            "description": "Departure from the city",
             "examples": [
               "2026-03-30T08:20:00"
             ]
@@ -762,7 +762,7 @@
           "order": {
             "type": "integer",
             "title": "Order",
-            "description": "Posición de la parada en el recorrido (1 = primera)",
+            "description": "Position of the stop in the route (1 = first)",
             "examples": [
               1
             ]
@@ -822,15 +822,15 @@
   "tags": [
     {
       "name": "Bus Tickets",
-      "description": "Consulta y alta de pasajes por código de boleto."
+      "description": "Look up and create bus tickets by ticket code."
     },
     {
       "name": "Terminal",
-      "description": "Terminales y viajes asociados a cada una."
+      "description": "Terminals and the trips associated with each one."
     },
     {
       "name": "Health",
-      "description": "Estado del servicio."
+      "description": "Service status."
     }
   ]
 }

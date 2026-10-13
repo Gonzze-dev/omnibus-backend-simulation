@@ -6,28 +6,28 @@ from app.config import settings
 from app.routes.ticket import bus_ticket_router, terminal_router
 
 DESCRIPTION = """
-Servicio upstream de terminales de ómnibus. Expone las terminales y los
-pasajes vendidos en ellas, y es consumido por el backend principal
-(`EXTERNAL_TERMINAL_UPSTREAM_URL`) y, a través de él, por el microservicio de OCR.
+Upstream bus terminal service. Exposes the terminals and the bus tickets
+sold at them, and is consumed by the main backend
+(`EXTERNAL_TERMINAL_UPSTREAM_URL`) and, through it, by the OCR microservice.
 
-**Autenticación:** ninguna. Es un servicio interno accesible solo desde la red del sistema.
+**Authentication:** none. It is an internal service reachable only from the system network.
 
-**Fechas:** ISO 8601 (`2026-03-30T06:00:00`). Las fechas sin zona horaria se
-interpretan tal como están guardadas en la base.
+**Dates:** ISO 8601 (`2026-03-30T06:00:00`). Dates without a time zone are
+interpreted exactly as stored in the database.
 
-**Errores:** las respuestas de error tienen la forma `{"detail": "..."}`. Los
-errores de validación (422) siguen el formato estándar de FastAPI.
+**Errors:** error responses have the shape `{"detail": "..."}`. Validation
+errors (422) follow the standard FastAPI format.
 """
 
 TAGS_METADATA = [
-    {"name": "Bus Tickets", "description": "Consulta y alta de pasajes por código de boleto."},
-    {"name": "Terminal", "description": "Terminales y viajes asociados a cada una."},
-    {"name": "Health", "description": "Estado del servicio."},
+    {"name": "Bus Tickets", "description": "Look up and create bus tickets by ticket code."},
+    {"name": "Terminal", "description": "Terminals and the trips associated with each one."},
+    {"name": "Health", "description": "Service status."},
 ]
 
 app = FastAPI(
-    title="API Terminales de Buses",
-    summary="Gestión de terminales y pasajes de ómnibus",
+    title="Bus Terminals API",
+    summary="Bus terminal and bus ticket management",
     description=DESCRIPTION,
     version="1.0.0",
     openapi_tags=TAGS_METADATA,
@@ -58,7 +58,7 @@ def root():
     responses={200: {"content": {"text/plain": {"example": "OK"}}}},
 )
 def health_check():
-    """Devuelve `OK` en texto plano si el servicio está en funcionamiento."""
+    """Returns `OK` as plain text if the service is up."""
     return "OK"
 
 if __name__ == "__main__":

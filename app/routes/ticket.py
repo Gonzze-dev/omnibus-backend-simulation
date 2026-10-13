@@ -23,14 +23,14 @@ terminal_router = APIRouter(prefix="/terminal", tags=["Terminal"])
 @bus_ticket_router.get(
     "/{ticket}",
     response_model=BusTicketResponse,
-    summary="Obtener pasaje por código de boleto",
-    responses={404: {"model": ErrorResponse, "description": "No existe un pasaje con ese código"}},
+    summary="Get bus ticket by ticket code",
+    responses={404: {"model": ErrorResponse, "description": "No bus ticket exists with that code"}},
 )
 def get_bus_ticket_by_ticket(ticket: str, db: Session = Depends(get_db)):
     """
-    Devuelve los datos completos de un pasaje (pasajero, colectivo, fechas y
-    paradas). Lo consume el backend principal cuando un usuario se registra
-    en un viaje.
+    Returns the full data of a bus ticket (passenger, bus, dates and
+    stops). The main backend consumes it when a user registers for a
+    trip.
     """
     bus_ticket = db.query(BusTicket).filter(BusTicket.ticket == ticket).first()
     if not bus_ticket:
@@ -42,16 +42,16 @@ def get_bus_ticket_by_ticket(ticket: str, db: Session = Depends(get_db)):
     "/",
     response_model=BusTicketResponse,
     status_code=201,
-    summary="Crear pasaje",
+    summary="Create bus ticket",
     responses={
-        404: {"model": ErrorResponse, "description": "La terminal indicada no existe"},
-        409: {"model": ErrorResponse, "description": "Ya existe un pasaje con ese código de boleto"},
+        404: {"model": ErrorResponse, "description": "The given terminal does not exist"},
+        409: {"model": ErrorResponse, "description": "A bus ticket with that ticket code already exists"},
     },
 )
 def create_bus_ticket(data: BusTicketCreate, db: Session = Depends(get_db)):
     """
-    Registra un pasaje nuevo. El código `ticket` debe ser único y
-    `terminal_uuid` debe referenciar una terminal existente.
+    Registers a new bus ticket. The `ticket` code must be unique and
+    `terminal_uuid` must reference an existing terminal.
     """
     existing = db.query(BusTicket).filter(BusTicket.ticket == data.ticket).first()
     if existing:
@@ -72,10 +72,10 @@ def create_bus_ticket(data: BusTicketCreate, db: Session = Depends(get_db)):
 @terminal_router.get(
     "/",
     response_model=list[TerminalItem],
-    summary="Listar terminales",
+    summary="List terminals",
 )
 def list_terminals(db: Session = Depends(get_db)):
-    """Todas las terminales registradas, ordenadas por nombre."""
+    """All registered terminals, ordered by name."""
     terminals = db.query(Terminal).order_by(Terminal.name).all()
     return [TerminalItem(uuid=t.uuid, terminal=t.name) for t in terminals]
 
@@ -83,15 +83,15 @@ def list_terminals(db: Session = Depends(get_db)):
 @terminal_router.get(
     "/exist/",
     response_model=ExistTerminalResponse,
-    summary="Verificar si existe una terminal",
+    summary="Check whether a terminal exists",
 )
 def exist_terminal(
-    uuid: UUID = Query(..., description="UUID de la terminal"),
+    uuid: UUID = Query(..., description="Terminal UUID"),
     db: Session = Depends(get_db),
 ):
     """
-    Indica si existe una terminal con ese UUID. El backend principal lo usa
-    antes de crear una terminal interna asociada.
+    Tells whether a terminal with that UUID exists. The main backend uses it
+    before creating an associated internal terminal.
     """
     found = db.get(Terminal, str(uuid))
     return {"exist": found is not None}
@@ -110,22 +110,22 @@ def _calendar_day_bounds(dt: datetime) -> tuple[datetime, datetime]:
 @terminal_router.get(
     "/trip/exist/",
     response_model=ExistTerminalResponse,
-    summary="Verificar si existe un viaje en una fecha",
+    summary="Check whether a trip exists on a date",
 )
 def exist_trip(
-    uuid: UUID = Query(..., description="UUID de la terminal"),
-    license_plate: str = Query(..., description="Patente del colectivo"),
+    uuid: UUID = Query(..., description="Terminal UUID"),
+    license_plate: str = Query(..., description="Bus license plate"),
     start_date: datetime = Query(
         ...,
-        description="Cualquier instante del día calendario a verificar (p. ej. 2026-03-30)",
+        description="Any instant of the calendar day to check (e.g. 2026-03-30)",
     ),
     db: Session = Depends(get_db),
 ):
     """
-    Indica si la terminal tiene un pasaje con esa patente cuyo viaje se
-    superpone con el día calendario de `start_date` (00:00–24:00 de esa
-    fecha). Lo usa el backend principal antes de enviar notificaciones de
-    demora.
+    Tells whether the terminal has a bus ticket with that license plate whose
+    trip overlaps the calendar day of `start_date` (00:00–24:00 of that
+    date). The main backend uses it before sending delay
+    notifications.
     """
     day_start, day_end = _calendar_day_bounds(start_date)
     found = (
@@ -145,22 +145,22 @@ def exist_trip(
 @terminal_router.get(
     "/trip/",
     response_model=TerminalBusTicketsResponse,
-    summary="Listar viajes de una terminal en un rango",
+    summary="List a terminal's trips in a range",
     responses={
-        400: {"model": ErrorResponse, "description": "`start_date` es posterior a `end_date`"},
-        404: {"model": ErrorResponse, "description": "La terminal no existe"},
+        400: {"model": ErrorResponse, "description": "`start_date` is after `end_date`"},
+        404: {"model": ErrorResponse, "description": "The terminal does not exist"},
     },
 )
 def get_bus_tickets_by_terminal(
-    uuid: UUID = Query(..., description="UUID de la terminal"),
-    start_date: datetime = Query(..., description="Inicio del rango (inclusive)"),
-    end_date: datetime = Query(..., description="Fin del rango (inclusive)"),
+    uuid: UUID = Query(..., description="Terminal UUID"),
+    start_date: datetime = Query(..., description="Range start (inclusive)"),
+    end_date: datetime = Query(..., description="Range end (inclusive)"),
     db: Session = Depends(get_db),
 ):
     """
-    Devuelve los viajes de la terminal que se superponen con el rango
-    `[start_date, end_date]`, ordenados por salida. Lo usa el microservicio
-    de OCR (vía backend principal) para saber qué colectivos se esperan.
+    Returns the terminal's trips that overlap the range
+    `[start_date, end_date]`, ordered by departure. The OCR microservice
+    uses it (through the main backend) to know which buses are expected.
     """
     if start_date > end_date:
         raise HTTPException(

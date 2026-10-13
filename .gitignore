@@ -1,26 +1,26 @@
-# Entorno virtual
+# Virtual environment
 virtual-env/
 venv/
 .venv/
 env/
 
-# Bytecode de Python
+# Python bytecode
 __pycache__/
 *.py[cod]
 *.pyo
 
-# Distribución / empaquetado
+# Distribution / packaging
 dist/
 build/
 *.egg-info/
 *.egg
 
-# Variables de entorno
+# Environment variables
 .env
 .env.*
 !.env.example
 
-# Base de datos SQLite
+# SQLite database
 *.db
 *.sqlite3
 
@@ -33,11 +33,11 @@ build/
 *.swp
 *.swo
 
-# Sistema operativo
+# Operating system
 .DS_Store
 Thumbs.db
 
-# pytest / cobertura
+# pytest / coverage
 .pytest_cache/
 .coverage
 htmlcov/

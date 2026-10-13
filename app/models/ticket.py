@@ -17,7 +17,7 @@ class Terminal(Base):
 
 
 class BusTicket(Base):
-    __tablename__ = "pasajes"
+    __tablename__ = "bus_tickets"
 
     uuid = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     postal_code = Column(String(20), nullable=False)

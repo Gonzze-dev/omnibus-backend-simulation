@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     DB_NAME: str = "omnibus-terminal"
     DB_PORT: int = 5432
     DB_SSLMODE: str = "disable"
-    # Orígenes separados por coma. Vacío = se permiten todos.
+    # Comma-separated origins. Empty = all are allowed.
     CORS_ALLOWED_ORIGINS: str = ""
 
     @property
