@@ -1,6 +1,7 @@
 # Build context: repo root (docker build -f infra.prod/Dockerfile .)
 # En Railway: RAILWAY_DOCKERFILE_PATH=infra.prod/Dockerfile
 # Migrations (e.g. as the Pre-Deploy Command on Railway): python migrate.py up
+# Initial data (from a shell in the container): python seed_data.py load && python update_dates.py
 
 FROM python:3.13-slim
 
@@ -15,7 +16,8 @@ RUN pip install -r requirements.txt
 
 COPY app ./app
 COPY migrations ./migrations
-COPY migrate.py seed.py seed_terminals.py terminals.py bus_tickets.py update_dates.py ./
+COPY data ./data
+COPY migrate.py seed.py seed_data.py seed_terminals.py terminals.py bus_tickets.py update_dates.py ./
 
 RUN useradd -r -u 10001 app
 USER app
